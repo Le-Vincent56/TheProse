@@ -58,6 +58,10 @@
   transform: scaleX(1);
 }
 
+#signup-button {
+  cursor: pointer;
+}
+
 html, body {
   height: 100%;
   width: 100%;

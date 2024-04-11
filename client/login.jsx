@@ -81,8 +81,8 @@ const SignupWindow = (props) => {
 
 const init = () => {
     // Get the login and signup buttons
-    const loginButton = document.getElementById('loginButton');
-    const signupButton = document.getElementById('signupButton');
+    const loginButton = document.getElementById('login-button');
+    const signupButton = document.getElementById('signup-button');
 
     // Set the root to the content element
     const root = createRoot(document.getElementById('content'));
