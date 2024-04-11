@@ -3,28 +3,32 @@
   <meta charset="utf-8"/>
   <title>The Prose - Login</title>
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
-  <link rel="stylesheet" type="text/css" href="/assets/styles/style.css"/>
+  <link rel="stylesheet" type="text/css" href="/assets/styles/loginStyle.css"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
+  <script src="/assets/loginBundle.js"></script>
 </head>
 <body> 
-  <nav>
-    <div class="navlink"><a href="/homeGuest"><img src="/assets/img/icons/icon_home.png"></a></div>
-    <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
-    <div class="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
-  </nav>
+  <div id="nav-bar">
+        <div id="prose-title-header">
+          <a class="nav-link" href="/homeGuest">
+            <h1>THE PROSE</h1>
+          </a>
+        </div>
+        <div id="login-link">
+          <a class="nav-link" href="/login">LOGIN</a>
+        </div>
+        <div id="signup-link">
+          <a class="nav-link" href="/signup">SIGNUP</a>
+        </div>
+    </div>
   
   <section id="content">
 
   </section>
 
-  <div id="domoMessage" class='hidden'>
-    <img id="speech" src="/assets/img/speech.png" alt="speech box"/>
-    <h3><span id="errorMessage"></span></h3>
-    <img id="domo" src="assets/img/domo.png" alt="domo"/>
-  </div>
-  <script src="/assets/loginBundle.js"></script>
+  
 </body>
 </html>
