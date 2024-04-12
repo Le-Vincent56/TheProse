@@ -84,6 +84,15 @@ html, body {
   top: 50%;
 }
 
+.form-background-loaded {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #07031A;
+  left: 0;
+  top: 0;
+}
+
 .main-form {
   display: grid;
   place-items: center;

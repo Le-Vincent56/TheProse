@@ -1,7 +1,10 @@
 const helper = require('./helper.js');
 const React = require('react');
 const {createRoot} = require('react-dom/client');
+const {useState, useEffect} = React;
 const {motion} = require('framer-motion');
+
+let currentPage = true; // True is login, false is signup
 
 const handleLogin = (e) => {
     // Prevent default events
@@ -42,23 +45,67 @@ const handleSignup = (e) => {
     return false;
 };
 
+const LoadBackground = (props) => {
+    if(props.firstRender) {
+        if(props.formToLoad) {
+            return (
+                <motion.div className="form-background"
+                    animate={{
+                        height: "100%",
+                        width: "100%",
+                        borderRadius: "0%",
+                        left: "0%",
+                        top: "0%"
+                    }}
+                    transition={{
+                        ease: "easeInOut",
+                        delay: 0.2,
+                        duration: 0.4,
+                    }}
+                >
+                    <LoginWindow/>
+                </motion.div>
+            );
+        } else {
+            return (
+                <motion.div className="form-background"
+                    animate={{
+                        height: "100%",
+                        width: "100%",
+                        borderRadius: "0%",
+                        left: "0%",
+                        top: "0%"
+                    }}
+                    transition={{
+                        ease: "easeInOut",
+                        delay: 0.2,
+                        duration: 0.4,
+                    }}
+                >
+                    <SignupWindow/>
+                </motion.div>
+            );
+        }
+    } else {
+        if(props.formToLoad) {
+            return(
+                <div className="form-background-loaded">
+                    <LoginWindow/>
+                </div>
+            );
+        } else {
+            return(
+                <div className="form-background-loaded">
+                    <SignupWindow/>
+                </div>
+            );
+        }
+    }
+}
+
 const LoginWindow = (props) => {
     return (
-        <motion.div className="form-background"
-            animate={{
-                height: "100%",
-                width: "100%",
-                borderRadius: "0%",
-                left: "0%",
-                top: "0%"
-            }}
-            transition={{
-                ease: "easeInOut",
-                delay: 0.2,
-                duration: 0.4,
-            }}
-        >
-            <motion.form id="login-form"
+        <motion.form id="login-form"
             name="loginForm"
             onSubmit={handleLogin}
             action="/login"
@@ -122,102 +169,86 @@ const LoginWindow = (props) => {
                     </motion.div>
                 </motion.div>
             </motion.form>
-        </motion.div>
     );
 };
 
 const SignupWindow = (props) => {
     return (
-        <motion.div className="form-background"
-            animate={{
-                height: "100%",
-                width: "100%",
-                borderRadius: "0%",
-                left: "0%",
-                top: "0%"
-            }}
-            transition={{
-                ease: "easeInOut",
-                delay: 0.2,
-                duration: 0.4,
-            }}
+        <motion.form id="signup-form"
+        name="signupForm"
+        onSubmit={handleSignup}
+        action="/signup"
+        method="POST"
+        className="main-form"
         >
-            <motion.form id="signup-form"
-            name="signupForm"
-            onSubmit={handleSignup}
-            action="/signup"
-            method="POST"
-            className="main-form"
-            >
-                <motion.div className="form-body">
-                    <motion.img src="assets/img/logo_primary.png" classname="form-image"
-                        animate={{opacity: [0, 1]}}
+            <motion.div className="form-body">
+                <motion.img src="assets/img/logo_primary.png" classname="form-image"
+                    animate={{opacity: [0, 1]}}
+                    transition={{
+                        ease: "easeInOut",
+                        delay: 0.85
+                    }}
+                >
+                    
+                </motion.img>
+                <motion.div className="form-header"
+                    animate={{opacity: [0, 1]}}
+                    transition={{
+                        ease: "easeInOut",
+                        delay: 0.9
+                    }}
+                >
+                    <div className="form-header-text-1">
+                        THE PROSE
+                    </div>
+                    <div className="form-header-text-2">
+                        WELCOME
+                    </div>
+                </motion.div>
+
+                <motion.div className="form-input-area">
+                    <motion.div className="form-input"
+                        animate={{opacity:[0, 1]}}
                         transition={{
                             ease: "easeInOut",
-                            delay: 0.85
+                            delay: 0.95
                         }}
                     >
-                        
-                    </motion.img>
-                    <motion.div className="form-header"
-                        animate={{opacity: [0, 1]}}
-                        transition={{
-                            ease: "easeInOut",
-                            delay: 0.9
-                        }}
-                    >
-                        <div className="form-header-text-1">
-                            THE PROSE
-                        </div>
-                        <div className="form-header-text-2">
-                            WELCOME
-                        </div>
+                        <input id="user" type="text" placeholder="USERNAME"/>
                     </motion.div>
 
-                    <motion.div className="form-input-area">
-                        <motion.div className="form-input"
-                            animate={{opacity:[0, 1]}}
-                            transition={{
-                                ease: "easeInOut",
-                                delay: 0.95
-                            }}
-                        >
-                            <input id="user" type="text" placeholder="USERNAME"/>
-                        </motion.div>
-
-                        <motion.div className="form-input"
-                            animate={{opacity:[0, 1]}}
-                            transition={{
-                                ease: "easeInOut",
-                                delay: 1.0
-                            }}
-                        >
-                            <input id="pass" type="password" placeholder="PASSWORD"/>
-                        </motion.div>
-
-                        <motion.div className="form-input"
-                            animate={{opacity:[0, 1]}}
-                            transition={{
-                                ease: "easeInOut",
-                                delay: 1.05
-                            }}
-                        >
-                            <input id="pass2" type="password" placeholder="CONFIRM PASSWORD"/>
-                        </motion.div>
-                    </motion.div>
-
-                    <motion.div className="submit-area"
-                        animate={{opacity: [0, 1]}}
+                    <motion.div className="form-input"
+                        animate={{opacity:[0, 1]}}
                         transition={{
                             ease: "easeInOut",
-                            delay: 1.10
+                            delay: 1.0
                         }}
                     >
-                        <button className="form-submit" type="submit">SIGN UP</button>
+                        <input id="pass" type="password" placeholder="PASSWORD"/>
+                    </motion.div>
+
+                    <motion.div className="form-input"
+                        animate={{opacity:[0, 1]}}
+                        transition={{
+                            ease: "easeInOut",
+                            delay: 1.05
+                        }}
+                    >
+                        <input id="pass2" type="password" placeholder="CONFIRM PASSWORD"/>
                     </motion.div>
                 </motion.div>
-            </motion.form>
-        </motion.div>
+
+                <motion.div className="submit-area"
+                    animate={{opacity: [0, 1]}}
+                    transition={{
+                        ease: "easeInOut",
+                        delay: 1.10
+                    }}
+                >
+                    <button className="form-submit" type="submit">SIGN UP</button>
+                </motion.div>
+            </motion.div>
+        </motion.form>
     );
 };
 
@@ -232,19 +263,21 @@ const init = () => {
     // Render the login window on click
     loginButton.addEventListener('click', (e) => {
         e.preventDefault();
-        root.render(<LoginWindow/>);
+        currentPage = true;
+        root.render(<LoadBackground firstRender={false} formToLoad={currentPage}/>)
         return false;
     });
 
     // Render the signup window on click
     signupButton.addEventListener('click', (e) => {
         e.preventDefault();
-        root.render(<SignupWindow/>);
+        currentPage = false;
+        root.render(<LoadBackground firstRender={false} formToLoad={currentPage}/>)
         return false;
     });
 
     // Render the login window
-    root.render(<LoginWindow/>)
+    root.render(<LoadBackground firstRender={true} formToLoad={currentPage}/>)
 };
 
 window.onload = init;
