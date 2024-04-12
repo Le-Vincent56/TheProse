@@ -1,6 +1,7 @@
 const helper = require('./helper.js');
 const React = require('react');
 const {createRoot} = require('react-dom/client');
+const {motion} = require('framer-motion');
 
 const handleLogin = (e) => {
     // Prevent default events
@@ -43,39 +44,180 @@ const handleSignup = (e) => {
 
 const LoginWindow = (props) => {
     return (
-        <form id="loginForm"
+        <motion.div className="form-background"
+            animate={{
+                height: "100%",
+                width: "100%",
+                borderRadius: "0%",
+                left: "0%",
+                top: "0%"
+            }}
+            transition={{
+                ease: "easeInOut",
+                delay: 0.2,
+                duration: 0.4,
+            }}
+        >
+            <motion.form id="login-form"
             name="loginForm"
             onSubmit={handleLogin}
             action="/login"
             method="POST"
-            className="mainForm"
-        >
-                <label htmlFor="username">Username: </label>
-                <input id="user" type="text" name="username" placeholder="username"/>
-                <label htmlFor="pass">Password: </label>
-                <input id="pass" type="password" name="pass" placeholder="password"/>
-                <input className="formSubmit" type="submit" value="Sign in"/>
-        </form>
+            className="main-form"
+            >
+                <motion.div className="form-body">
+                    <motion.img src="assets/img/logo_primary.png" classname="form-image"
+                        animate={{opacity: [0, 1]}}
+                        transition={{
+                            ease: "easeInOut",
+                            delay: 0.85
+                        }}
+                    >
+                        
+                    </motion.img>
+                    <motion.div className="form-header"
+                        animate={{opacity: [0, 1]}}
+                        transition={{
+                            ease: "easeInOut",
+                            delay: 0.9
+                        }}
+                    >
+                        <div className="form-header-text-1">
+                            THE PROSE
+                        </div>
+                        <div className="form-header-text-2">
+                            WELCOME BACK
+                        </div>
+                    </motion.div>
+
+                    <motion.div className="form-input-area">
+                        <motion.div className="form-input"
+                            animate={{opacity:[0, 1]}}
+                            transition={{
+                                ease: "easeInOut",
+                                delay: 0.95
+                            }}
+                        >
+                            <input id="user" type="text" placeholder="USERNAME"/>
+                        </motion.div>
+                        <motion.div className="form-input"
+                            animate={{opacity:[0, 1]}}
+                            transition={{
+                                ease: "easeInOut",
+                                delay: 1.0
+                            }}
+                        >
+                            <input id="pass" type="password" placeholder="PASSWORD"/>
+                        </motion.div>
+                    </motion.div>
+
+                    <motion.div className="submit-area"
+                        animate={{opacity: [0, 1]}}
+                        transition={{
+                            ease: "easeInOut",
+                            delay: 1.05
+                        }}
+                    >
+                        <button className="form-submit" type="submit">LOGIN</button>
+                    </motion.div>
+                </motion.div>
+            </motion.form>
+        </motion.div>
     );
 };
 
 const SignupWindow = (props) => {
     return (
-        <form id="signupForm"
+        <motion.div className="form-background"
+            animate={{
+                height: "100%",
+                width: "100%",
+                borderRadius: "0%",
+                left: "0%",
+                top: "0%"
+            }}
+            transition={{
+                ease: "easeInOut",
+                delay: 0.2,
+                duration: 0.4,
+            }}
+        >
+            <motion.form id="signup-form"
             name="signupForm"
             onSubmit={handleSignup}
             action="/signup"
             method="POST"
-            className="mainForm"
-        >
-                <label htmlFor="username">Username: </label>
-                <input id="user" type="text" name="username" placeholder="username"/>
-                <label htmlFor="pass">Password: </label>
-                <input id="pass" type="password" name="pass" placeholder="password"/>
-                <label htmlFor="pass">Password: </label>
-                <input id="pass2" type="password" name="pass2" placeholder="retype password"/>
-                <input className="formSubmit" type="submit" value="Sign in"/>
-        </form>
+            className="main-form"
+            >
+                <motion.div className="form-body">
+                    <motion.img src="assets/img/logo_primary.png" classname="form-image"
+                        animate={{opacity: [0, 1]}}
+                        transition={{
+                            ease: "easeInOut",
+                            delay: 0.85
+                        }}
+                    >
+                        
+                    </motion.img>
+                    <motion.div className="form-header"
+                        animate={{opacity: [0, 1]}}
+                        transition={{
+                            ease: "easeInOut",
+                            delay: 0.9
+                        }}
+                    >
+                        <div className="form-header-text-1">
+                            THE PROSE
+                        </div>
+                        <div className="form-header-text-2">
+                            WELCOME
+                        </div>
+                    </motion.div>
+
+                    <motion.div className="form-input-area">
+                        <motion.div className="form-input"
+                            animate={{opacity:[0, 1]}}
+                            transition={{
+                                ease: "easeInOut",
+                                delay: 0.95
+                            }}
+                        >
+                            <input id="user" type="text" placeholder="USERNAME"/>
+                        </motion.div>
+
+                        <motion.div className="form-input"
+                            animate={{opacity:[0, 1]}}
+                            transition={{
+                                ease: "easeInOut",
+                                delay: 1.0
+                            }}
+                        >
+                            <input id="pass" type="password" placeholder="PASSWORD"/>
+                        </motion.div>
+
+                        <motion.div className="form-input"
+                            animate={{opacity:[0, 1]}}
+                            transition={{
+                                ease: "easeInOut",
+                                delay: 1.05
+                            }}
+                        >
+                            <input id="pass2" type="password" placeholder="CONFIRM PASSWORD"/>
+                        </motion.div>
+                    </motion.div>
+
+                    <motion.div className="submit-area"
+                        animate={{opacity: [0, 1]}}
+                        transition={{
+                            ease: "easeInOut",
+                            delay: 1.10
+                        }}
+                    >
+                        <button className="form-submit" type="submit">SIGN UP</button>
+                    </motion.div>
+                </motion.div>
+            </motion.form>
+        </motion.div>
     );
 };
 

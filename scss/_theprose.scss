@@ -1,11 +1,18 @@
 @use 'navbar';
 
+$background-color: #F4F6FF;
+$primary-color: #FBD46D;
+$secondary-color: #4F8A8B;
+$dark-color: #07031A;
+$main-font: "EB Garamond", serif;
+
 html, body {
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    color: black;
-    font-family: "EB Garamond", serif;
+    color: $dark-color;
+    background-color: $background-color;
+    font-family: $main-font;
 }
