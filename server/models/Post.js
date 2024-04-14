@@ -1,26 +1,23 @@
 // Imports
 const mongoose = require('mongoose');
-const _ = require('underscore');
-
-// Set the domo name
-const setName = (name) => _.escape(name).trim();
 
 // Define the Domo schema
-const DomoSchema = new mongoose.Schema({
+const PostSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
     trim: true,
-    set: setName,
   },
-  age: {
-    type: Number,
-    min: 0,
+  body: {
+    type: String,
     required: true,
   },
-  level: {
-    type: Number,
-    min: 1,
+  genre: {
+    type: [String],
+    required: true,
+  },
+  author: {
+    type: String,
     required: true,
   },
   owner: {
@@ -39,15 +36,16 @@ const DomoSchema = new mongoose.Schema({
 });
 
 // Converts a doc to something we can store in redis later on.
-DomoSchema.statics.toAPI = (doc) => ({
+PostSchema.statics.toAPI = (doc) => ({
   name: doc.name,
-  age: doc.age,
-  level: doc.level,
+  body: doc.body,
+  genre: doc.genre,
+  author: doc.author,
   id: doc.id,
 });
 
 // Establish the Domo model
-const DomoModel = mongoose.model('Domo', DomoSchema);
+const PostModel = mongoose.model('Post', PostSchema);
 
 // Exports
-module.exports = DomoModel;
+module.exports = PostModel;

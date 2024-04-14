@@ -1,10 +1,5 @@
 @use 'navbar';
-
-$background-color: #F4F6FF;
-$primary-color: #FBD46D;
-$secondary-color: #4F8A8B;
-$dark-color: #07031A;
-$main-font: "EB Garamond", serif;
+@use 'palette';
 
 html, body {
     height: 100%;
@@ -12,7 +7,7 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    color: $dark-color;
-    background-color: $background-color;
-    font-family: $main-font;
+    color: palette.$dark-color;
+    background-color: palette.$background-color;
+    font-family: palette.$main-font;
 }

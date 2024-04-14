@@ -16,7 +16,6 @@ const sendPost = async (url, data, handler) => {
     });
   
     const result = await response.json();
-    document.getElementById('domoMessage').classList.add('hidden');
   
     if(result.redirect) {
       window.location = result.redirect;
@@ -29,7 +28,7 @@ const sendPost = async (url, data, handler) => {
 
     // If there's a handler, then send in the result
     if(handler) {
-        handler(result);
+      handler(result);
     }
 };
 

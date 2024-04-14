@@ -1,9 +1,24 @@
 // Local imports - imports models/index.js
+const url = require('url');
+const query = require('querystring')
 const models = require('../models');
 
 const { Account } = models;
 
-const loginPage = (req, res) => res.render('login');
+const loginPage = (req, res) => {
+  const parsedURL = url.parse(req.url);
+  const params = query.parse(parsedURL.query);
+
+  if(params.signup === "true") {
+    res.render("login", {
+      signup: true
+    });
+  } else {
+    res.render("login", {
+      signup: false
+    });
+  }
+}
 
 const logout = (req, res) => {
   // Destroy session cookies to notify the server of logout
@@ -33,8 +48,8 @@ const login = (req, res) => {
     // Save the account to the session cookies and track data
     req.session.account = Account.toAPI(account);
 
-    // Redirect to the /maker page
-    return res.json({ redirect: '/homeUser' });
+    // Redirect to the /homeUser page
+    return res.json({ redirect: '/home' });
   });
 };
 
@@ -66,8 +81,8 @@ const signup = async (req, res) => {
     // Save the account to the session cookies and track data
     req.session.account = Account.toAPI(newAccount);
 
-    // Redirect back to the /maker page
-    return res.json({ redirect: '/homeUser' });
+    // Redirect back to the /homeUser page
+    return res.json({ redirect: '/home' });
   } catch (err) {
     // Log the error
     console.log(err);

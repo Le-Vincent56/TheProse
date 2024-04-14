@@ -8,7 +8,7 @@
   justify-content: flex-end;
   position: relative;
   background-color: #07031A;
-  color: #F4F6FF;
+  color: white;
   z-index: 3;
 }
 
@@ -49,7 +49,7 @@
   height: 2px;
   bottom: -2px;
   left: 0;
-  background-color: #F4F6FF;
+  background-color: white;
   transform: scaleX(0);
   transform-origin: top left;
   transition: transform 0.3s ease;

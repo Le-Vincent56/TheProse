@@ -1,0 +1,150 @@
+@use 'palette';
+@import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0);
+
+@mixin form-text-input {
+    height: 40px;
+    padding: 10px;
+    transition: 0.2s ease-in-out;
+    border: 2.5px solid black;
+    font-family: palette.$main-font;
+    background-color: palette.$background-color;
+}
+
+@mixin hover-effect {
+    background-color: palette.$background-color-darker;
+}
+
+@mixin box-shadow-effect {
+    outline: none;
+    border: 0.5px solid black;
+    box-shadow: -5px -5px 0px palette.$dark-color;
+    background-color: palette.$background-color;
+}
+
+.form-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 800px;
+    background-color: palette.$background-color;
+    padding: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    label {
+        font-weight: 600;
+    }
+}
+
+.form-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    gap: 15px;
+
+    .form-details-1 {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 20px;
+
+        .form-detail-title {
+            flex-grow: 3;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            gap: 10px;
+        }
+
+        .form-detail-author {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            gap: 10px;
+        }
+    }
+
+    .form-details-2 {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        gap: 10px;
+
+        .genre-tag-container {
+            @include form-text-input;
+            display: flex;
+            padding: 0px;
+
+            .tag {
+                padding: 5px;
+                border: 1px solid palette.$dark-color;
+                margin: 5px;
+                display: flex;
+                align-items: center;
+                border-radius: 3px;
+                background: palette.$background-color-darker;
+                cursor: default;
+
+                i {
+                    cursor: pointer;
+                    font-size: 16px;
+                    margin-left: 5px;
+                }
+            }
+
+            #genre-input {
+                flex: 1;
+                font-family: palette.$main-font;
+                font-size: 18px;
+                outline: none;
+                border: 0;
+                background-color: palette.$background-color;
+                padding: 10px;
+            }
+        }
+    }
+}
+
+#title-input {
+    font-size: 24px;
+}
+
+#author-input {
+    font-size: 18px;
+}
+
+.form-body {
+    width: 100%;
+
+    .form-text-area {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        gap: 10px;
+    }
+}
+
+.form-input {
+    @include form-text-input;
+}
+
+.body-area {
+    padding: 10px;
+    transition: 0.2s linear;
+    border: 2.5px solid black;
+    font-size: 14px;
+    font-family: palette.$main-font;
+    background-color: palette.$background-color;
+}
+
+.form-input:hover, .body-area:hover {
+    @include hover-effect;
+}
+
+.form-input:focus, .body-area:focus {
+    @include box-shadow-effect;
+}
+
