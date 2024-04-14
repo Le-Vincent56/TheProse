@@ -80,7 +80,7 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  width: 800px;
+  width: 1000px;
   background-color: #F4F6FF;
   padding: 20px;
   left: 50%;
@@ -96,6 +96,7 @@ html, body {
   justify-content: center;
   width: 100%;
   gap: 15px;
+  min-height: 170px;
 }
 .form-header .form-details-1 {
   display: flex;
@@ -131,12 +132,14 @@ html, body {
   font-family: "EB Garamond", serif;
   background-color: #F4F6FF;
   display: flex;
+  flex-wrap: wrap;
   padding: 0px;
+  height: auto;
 }
 .form-header .form-details-2 .genre-tag-container .tag {
   padding: 5px;
   border: 1px solid #07031A;
-  margin: 5px;
+  margin: 3px 5px 5px;
   display: flex;
   align-items: center;
   border-radius: 3px;
@@ -156,6 +159,7 @@ html, body {
   border: 0;
   background-color: #F4F6FF;
   padding: 10px;
+  height: 37.5px;
 }
 
 #title-input {
@@ -203,4 +207,32 @@ html, body {
   border: 0.5px solid black;
   box-shadow: -5px -5px 0px #07031A;
   background-color: #F4F6FF;
+}
+
+.form-footer {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+}
+.form-footer button {
+  width: 125px;
+  height: 50px;
+  font-family: "EB Garamond", serif;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1.5px solid #07031A;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: none;
+  background-color: #F4F6FF;
+}
+.form-footer button:hover {
+  color: #F4F6FF;
+  background-color: #07031A;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+.form-footer button:active {
+  box-shadow: none;
+  transform: translateY(0);
 }

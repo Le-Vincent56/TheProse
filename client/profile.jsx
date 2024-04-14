@@ -249,11 +249,12 @@ const PostForm = (props) => {
                 <div class="form-body">
                     <div class="form-text-area">
                         <label for="body">BODY</label>
-                        <textarea name="body" rows="10" placeholder="" class="body-area"></textarea>
+                        <textarea name="body" rows="40" placeholder="" class="body-area"></textarea>
                     </div>
                 </div>
 
                 <div class="form-footer">
+                    <button class="form-save-btn">SAVE DRAFT</button>
                     <button class="form-post-btn">POST</button>
                 </div>
             </div>
