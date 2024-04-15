@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 // Define the Domo schema
 const PostSchema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
     required: true,
     trim: true,
@@ -37,7 +37,7 @@ const PostSchema = new mongoose.Schema({
 
 // Converts a doc to something we can store in redis later on.
 PostSchema.statics.toAPI = (doc) => ({
-  name: doc.name,
+  title: doc.title,
   body: doc.body,
   genre: doc.genre,
   author: doc.author,

@@ -123,16 +123,52 @@ const cancelPost = (e) => {
     loadPage();
 }
 
+const postWork = (e, onPostAdded) => {
+    e.preventDefault();
+    
+    // Gather post details
+    const title = document.querySelector('#title-input').value;
+    const author = document.querySelector('#author-input').value;
+
+    // Gather genre tags
+    const postTags = [];
+    const tagContainers = document.querySelectorAll('.tag');
+    for(const tagContainer of tagContainers) {
+        postTags.push(tagContainer.querySelector('span').innerHTML);
+    }
+
+    // Get body text
+    const body = document.querySelector('.body-area').value;
+
+    if(!title || !author || !postTags || !body) {
+        // SEND ERROR
+        console.log("Missing fields");
+        return false;
+    }
+
+    // Assemble the object
+    const postData = {
+        title: title,
+        author: author,
+        genre: postTags,
+        body: body
+    };
+
+    // Post the post
+    helper.sendPost('/postWork', postData, onPostAdded);
+    return false;
+}
+
 const PostList = (props) => {
     const [posts, setPosts] = useState(props.posts);
 
     useEffect(() => {
-        // const loadPostsFromServer = async () => {
-        //     const response = await fetch('/getPosts');
-        //     const data = await response.json();
-        //     setPosts(data.posts);
-        // };
-        // loadPostsFromServer();
+        const loadPostsFromServer = async () => {
+            const response = await fetch('/getPosts');
+            const data = await response.json();
+            setPosts(data.posts);
+        };
+        loadPostsFromServer();
     }, [props.reloadPosts]);
 
     // Present the appropriate HTML if there are no posts
@@ -160,21 +196,21 @@ const PostList = (props) => {
 
         return(
             <div id={post.id} className="post-node">
-                <div classname="post-title">
-                    <h2 className="post-title-text">TITLE: {post.name}</h2>
-                </div>
-                <div className="post-author">
-                    <h3 className="post-author-text">BY: {post.author}</h3>
-                </div>
-                <div className="post-genre">
-                    <h4 className="post-genre-text">GENRE(S){genreString}</h4>
-                </div>
-                <div className="post-edit">
-                    <button id="post-edit-button"
-                        onClick={(e) => startEdit(e)}
-                    >
-                        EDIT
-                    </button>
+                <div class="post-node-content">
+                    <h2 class="post-title">{post.title}</h2>
+                    <div class="post-author">
+                        <h3 class="post-author-text">By: {post.author}</h3>
+                    </div>
+                    <div class="post-hover-content">
+                        <div className="post-genre">
+                            <h4 className="post-genre-text">GENRE(S){genreString}</h4>
+                        </div>
+                        <div className="post-edit">
+                            <button id="post-edit-button"
+                                onClick={(e) => startEdit(e)}
+                            >EDIT</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         )
@@ -255,7 +291,8 @@ const PostForm = (props) => {
 
                 <div class="form-footer">
                     <button class="form-save-btn">SAVE DRAFT</button>
-                    <button class="form-post-btn">POST</button>
+                    <button class="form-post-btn"
+                    onClick={(e) => {postWork(e, props.triggerReload)}}>POST</button>
                 </div>
             </div>
         </form>
@@ -281,7 +318,7 @@ const LoadPage = (props) => {
             return(
                 <div id="profile-new-post">
                     <PostControls/>
-                    <PostForm/>
+                    <PostForm triggerReload={() => setReloadPosts(!reloadPosts)}/>
                 </div>
             );
     }

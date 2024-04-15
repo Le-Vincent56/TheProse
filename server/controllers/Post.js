@@ -4,17 +4,17 @@ const models = require('../models');
 const { Post } = models;
 
 const makePost = async (req, res) => {
-  // Check if the post has a name, an age, or a level
-  if (!req.body.name || !req.body.body || !req.body.genre || !req.body.author) {
-    return res.status(400).json({ error: 'A name, body, genre, and author are required!' });
+  // Check if the post has a title, an author, genres, or a body
+  if (!req.body.title || !req.body.author || !req.body.genre || !req.body.body) {
+    return res.status(400).json({ error: 'A title, author, genre, and body is required' });
   }
 
   // Create the post data
   const postData = {
-    name: req.body.name,
-    body: req.body.body,
-    genre: req.body.genre,
+    title: req.body.title,
     author: req.body.author,
+    genre: req.body.genre,
+    body: req.body.body,
     owner: req.session.account._id,
     id: Math.floor(Math.random() * 1000000)
   };
@@ -25,16 +25,16 @@ const makePost = async (req, res) => {
   try {
     // Try to get the posts for the account id
     const query = { owner: req.session.account._id };
-    posts = await Post.find(query).select('name author id').lean().exec();
+    posts = await Post.find(query).select('title author id').lean().exec();
   } catch (err) {
     // Log any errors and return a status code
     console.log(err);
     return res.status(500).json({ error: 'Error retrieving posts!' });
   }
 
-  // Check if the name is unique
+  // Check if the title is unique
   for(let i = 0; i < posts.length; i++) {
-    if(posts[i].name === postData.name) {
+    if(posts[i].title === postData.title) {
       return res.status(400).json({error: "A unique title is required"});
     }
   }
@@ -68,7 +68,7 @@ const makePost = async (req, res) => {
     // Once complete, redirect to the maker page
     return res.status(201).json(
       { 
-        name: newPost.name,
+        title: newPost.title,
         author: newPost.author,
       }
     );
@@ -89,7 +89,7 @@ const makePost = async (req, res) => {
 const editPost = async (req, res) => {
   // Create a post object from the posted data
   const postData = {
-    name: req.body.name,
+    title: req.body.title,
     body: req.body.body,
     genre: req.body.genre,
     author: req.body.author,
@@ -102,7 +102,7 @@ const editPost = async (req, res) => {
     const updatePost = await Post.findOneAndUpdate(
       query,
       {
-        name: postData.name,
+        title: postData.title,
         body: postData.body,
         genre: postData.genre,
         author: postData.author,
@@ -120,7 +120,7 @@ const getPosts = async (req, res) => {
   try {
     // Try to get the posts for the account id
     const query = { owner: req.session.account._id };
-    const docs = await Post.find(query).select('name body genre author id').lean().exec();
+    const docs = await Post.find(query).select('title body genre author id').lean().exec();
 
     // Return the posts in a json
     return res.json({ posts: docs });
