@@ -102,8 +102,22 @@ const loadPage = () => {
     root.render(<LoadPage currentState={currentState}/>);
 }
 
-const startEdit = (e) => {
+const loadPageEdit = (editPostData) => {
+    // Reload the page with an id to edit
+    const root = createRoot(document.getElementById('content'));
+    root.render(<LoadPage currentState={currentState} postObj={editPostData}/>);
+}
 
+const startEdit = async (e) => {
+    // Get data
+    const response = await fetch(`/getPost?id=${e.target.id}`);
+    const data = await response.json();
+
+    // Set current state to editing a post
+    currentState = 2;
+
+    // Load the edit page
+    loadPageEdit(data.post[0]);
 }
 
 const startPost = (e) => {
@@ -136,6 +150,9 @@ const postWork = (e, onPostAdded) => {
     for(const tagContainer of tagContainers) {
         postTags.push(tagContainer.querySelector('span').innerHTML);
     }
+
+    // Reset tags
+    tags = [];
 
     // Get body text
     const body = document.querySelector('.body-area').value;
@@ -195,20 +212,19 @@ const PostList = (props) => {
         }
 
         return(
-            <div id={post.id} className="post-node">
-                <div class="post-node-content">
-                    <h2 class="post-title">{post.title}</h2>
-                    <div class="post-author">
-                        <h3 class="post-author-text">By: {post.author}</h3>
+            <div id={post.id} className="post-node"
+                onClick={(e) => startEdit(e)}>
+                <div id={post.id} class="post-node-content">
+                    <h2 id={post.id} class="post-title">{post.title}</h2>
+                    <div id={post.id} class="post-author">
+                        <h4 id={post.id} class="post-author-text">By: {post.author}</h4>
                     </div>
-                    <div class="post-hover-content">
-                        <div className="post-genre">
-                            <h4 className="post-genre-text">GENRE(S){genreString}</h4>
+                    <div id={post.id} class="post-hover-content">
+                        <div id={post.id} class="post-genre">
+                            <h4 id={post.id} class="post-genre-text">{genreString}</h4>
                         </div>
-                        <div className="post-edit">
-                            <button id="post-edit-button"
-                                onClick={(e) => startEdit(e)}
-                            >EDIT</button>
+                        <div id={post.id} class="post-body-preview">
+                            <p id={post.id} class="post-body-preview-text">{post.body.slice(0, 250)}</p>
                         </div>
                     </div>
                 </div>
@@ -253,16 +269,17 @@ const PostControls = (props) => {
     );
 }
 
-const PostForm = (props) => {
+const PostFormCreate = (props) => {
     return(
         <form class="form"
-        onSubmit={(e) => {e.preventDefault();}}>
+            onSubmit={(e) => {e.preventDefault();}}>
             <div class="form-content">
                 <div class="form-header">
                     <div class="form-details-1">
                         <div class="form-detail-title">
                             <label for="title">TITLE</label>
-                            <input id="title-input" name="title" placeholder="" type="text" class="form-input"/>
+                            <input id="title-input" name="title" placeholder="" 
+                            type="text" class="form-input"/>
                         </div>
 
                         <div class="form-detail-author">
@@ -299,8 +316,77 @@ const PostForm = (props) => {
     );
 }
 
+const PostFormEdit = (props) => {
+    return(
+        <form class="form"
+            onSubmit={(e) => {e.preventDefault();}}>
+            <div class="form-content">
+                <div class="form-header">
+                    <div class="form-details-1">
+                        <div class="form-detail-title">
+                            <label for="title">TITLE</label>
+                            <input id="title-input" name="title" placeholder="" 
+                            type="text" class="form-input"/>
+                        </div>
+
+                        <div class="form-detail-author">
+                            <label for="author">AUTHOR</label>
+                            <input id="author-input" name="author" placeholder="" type="text" class="form-input"/>
+                        </div>
+                        
+                    </div>
+                    <div class="form-details-2">
+                        <label for="genre">GENRE(S)</label>
+                        <div class="genre-tag-container">
+                            <input id="genre-input" name="genre" placeholder="" type="text"
+                                onFocus={(e) => applyBoxShadow(e)}
+                                onBlur={(e) => revertBoxShadow(e)}
+                                onKeyUp={(e) => createTagEvent(e)}/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-body">
+                    <div class="form-text-area">
+                        <label for="body">BODY</label>
+                        <textarea name="body" rows="40" placeholder="" class="body-area"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button class="form-save-btn">SAVE DRAFT</button>
+                    <button class="form-post-btn"
+                    onClick={(e) => {postWork(e, props.triggerReload)}}>POST</button>
+                    <button class="form-delete-btn">DELETE</button>
+                </div>
+            </div>
+        </form>
+    );
+}
+
 const LoadPage = (props) => {
     const [reloadPosts, setReloadPosts] = useState(false);
+
+    useEffect(() => {
+        // If editing, add the current data
+        if(currentState === 2) {
+            // Add title
+            const title = document.querySelector('#title-input');
+            title.value = value = props.postObj.title;
+
+            // Add author
+            const author = document.querySelector('#author-input');
+            author.value = props.postObj.author;
+
+            // Set tags
+            tags = props.postObj.genre;
+            addTags();
+
+            // Add body
+            const body = document.querySelector('.body-area');
+            body.value = props.postObj.body;
+        }
+    })
 
     // Check which page to display
     switch(props.currentState) {
@@ -318,7 +404,16 @@ const LoadPage = (props) => {
             return(
                 <div id="profile-new-post">
                     <PostControls/>
-                    <PostForm triggerReload={() => setReloadPosts(!reloadPosts)}/>
+                    <PostFormCreate triggerReload={() => setReloadPosts(!reloadPosts)}/>
+                </div>
+            );
+
+        // Edit post
+        case 2:
+            return(
+                <div id="profile-edit-post">
+                    <PostControls/>
+                    <PostFormEdit postData={props.postData} triggerReload={() => setReloadPosts(!reloadPosts)}/>
                 </div>
             );
     }

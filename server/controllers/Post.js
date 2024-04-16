@@ -1,4 +1,6 @@
 // Imports
+const url = require('url');
+const query = require('querystring')
 const models = require('../models');
 
 const { Post } = models;
@@ -131,9 +133,27 @@ const getPosts = async (req, res) => {
   }
 };
 
+const getPost = async (req, res) => {
+  const parsedURL = url.parse(req.url);
+  const params = query.parse(parsedURL.query);
+
+  try {
+    const query = {id: params.id};
+    const docs = await Post.find(query).select('title body genre author').lean().exec();
+
+    // Return the post in a json
+    return res.json({post: docs});
+  } catch (err) {
+    // Log any errors and return a status code
+    console.log(err);
+    return res.status(500).json({error: 'Error retrieving posts!'});
+  }
+}
+
 // Exports
 module.exports = {
   makePost,
   editPost,
   getPosts,
+  getPost,
 };

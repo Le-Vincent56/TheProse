@@ -9,6 +9,7 @@ const router = (app) => {
 
   app.get('/profile', mid.requiresLogin, controllers.Profile.profilePage);
   app.get('/getPosts', mid.requiresLogin, controllers.Post.getPosts);
+  app.get('/getPost', mid.requiresLogin, controllers.Post.getPost);
   app.post('/postwork', mid.requiresLogin, controllers.Post.makePost);
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);

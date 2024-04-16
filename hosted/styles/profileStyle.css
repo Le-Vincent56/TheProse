@@ -239,6 +239,8 @@ html, body {
 
 .post-list {
   display: flex;
+  flex-direction: column;
+  gap: 5px;
   align-items: center;
   justify-content: center;
 }
@@ -250,7 +252,7 @@ html, body {
   cursor: pointer;
   width: 22em;
   max-width: 80%;
-  padding: 2em 0;
+  padding: 15px 0;
   background-color: #F4F6FF;
   box-shadow: 0 0 6px 0 rgba(32, 32, 36, 0.12);
   transitioN: all 0.35s ease;
@@ -260,21 +262,34 @@ html, body {
   max-width: 80%;
 }
 .post-node .post-title {
-  margin: 0 0 1em;
+  margin: 0 0 5px;
   width: 10.625em;
   transition: all 0.35s ease;
 }
 .post-node .post-author-text {
-  font-weight: 600;
+  font-weight: 500;
   text-transform: uppercase;
   margin: 0;
-  letter-spacing: 2px;
 }
 .post-node .post-hover-content {
   overflow: hidden;
   max-height: 0;
   transform: translateY(1em);
   transition: all 0.55s ease;
+}
+.post-node .post-hover-content .post-body-preview {
+  max-height: 5em;
+  overflow: hidden;
+  position: relative;
+}
+.post-node .post-hover-content .post-body-preview::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgb(244, 246, 255) 90%);
 }
 
 .post-node::before, .post-node::after {
@@ -303,9 +318,6 @@ html, body {
 .post-node:hover {
   width: 24em;
   box-shadow: 0 10px 20px 0 rgba(32, 32, 36, 0.12);
-}
-.post-node:hover .post-title {
-  margin-bottom: 0.5em;
 }
 .post-node:hover .post-hover-content {
   max-height: 10em;
