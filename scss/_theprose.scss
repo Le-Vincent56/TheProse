@@ -11,3 +11,19 @@ html, body {
     background-color: palette.$background-color;
     font-family: palette.$main-font;
 }
+
+.hidden {
+    opacity: 0;
+}
+
+#message-handler {
+    margin-top: 20px;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+
+    #message-text {
+        font-family: palette.$main-font;
+        color: palette.$error-color;
+    }
+}

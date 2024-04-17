@@ -124,3 +124,12 @@
     color: #161616;
     cursor: pointer;
 }
+
+.other-controls {
+    margin-top: 30px;
+
+    p {
+        cursor: pointer;
+        color: palette.$background-color-darker;
+    }
+}

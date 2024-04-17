@@ -73,3 +73,21 @@ html, body {
   background-color: #F4F6FF;
   font-family: "EB Garamond", serif;
 }
+
+.hidden {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
+
+#message-handler {
+  margin-top: 20px;
+  text-align: center;
+  transition: visibility 1s ease-in-out;
+}
+#message-handler #message-text {
+  font-family: "EB Garamond", serif;
+  color: #a30f05;
+}

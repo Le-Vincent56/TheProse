@@ -97,10 +97,54 @@ const signup = async (req, res) => {
   }
 };
 
+const resetPass = async (req, res) => {
+  // Retrieve data
+  const accountData = {
+    username: req.body.username,
+    password: req.body.pass,
+    newPassword: req.body.pass2,
+  }
+
+  // Check if all fields were given
+  if (!accountData.username || !accountData.password 
+    || !accountData.newPassword) {
+    return res.status(400).json({ error: 'All fields are required!' });
+  }
+
+  try {
+    // Try to get into the account
+    return Account.authenticate(accountData.username, accountData.password, async (err, account) => {
+      // Check if there's an error, or if the account is invalid
+      if (err || !account) {
+        return res.status(401).json({ error: 'Wrong username or password!' });
+      }
+
+      // Hash the password
+      const hash = await Account.generateHash(accountData.newPassword);
+      const query = {username: accountData.username};
+      const updateAccount = await Account.findOneAndUpdate(
+        query,
+        {
+          username: accountData.username,
+          password: hash,
+        }
+      ).lean().exec();
+
+       // Redirect to the /login page
+      return res.json({ redirect: '/login' });
+    })
+  } catch(err) {
+    // Log any errors and return a status code
+    console.log(err);
+    return res.status(500).json({ error: 'Error editing post!' });
+  }
+}
+
 // Exports
 module.exports = {
   loginPage,
   logout,
   login,
   signup,
+  resetPass,
 };

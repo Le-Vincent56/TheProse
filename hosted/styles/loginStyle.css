@@ -74,6 +74,24 @@ html, body {
   font-family: "EB Garamond", serif;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
+
+#message-handler {
+  margin-top: 20px;
+  text-align: center;
+  transition: visibility 1s ease-in-out;
+}
+#message-handler #message-text {
+  font-family: "EB Garamond", serif;
+  color: #a30f05;
+}
+
 .form-background {
   position: absolute;
   width: 0px;
@@ -194,4 +212,12 @@ html, body {
   background-color: #FBD46D;
   color: #161616;
   cursor: pointer;
+}
+
+.other-controls {
+  margin-top: 30px;
+}
+.other-controls p {
+  cursor: pointer;
+  color: #DCDDE0;
 }

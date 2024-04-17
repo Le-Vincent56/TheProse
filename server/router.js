@@ -6,8 +6,11 @@ const router = (app) => {
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
+  
 
   app.get('/profile', mid.requiresLogin, controllers.Profile.profilePage);
+  app.get('/resetpass', mid.requiresSecure, mid.requiresLogin, controllers.Profile.resetPass);
+  app.post('/resetpass', mid.requiresSecure, mid.requiresLogin, controllers.Account.resetPass);
   app.get('/getPosts', mid.requiresLogin, controllers.Post.getPosts);
   app.get('/getPost', mid.requiresLogin, controllers.Post.getPost);
   app.post('/postwork', mid.requiresLogin, controllers.Post.makePost);

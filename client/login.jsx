@@ -8,6 +8,7 @@ let currentPage = true; // True is login, false is signup
 const handleLogin = (e) => {
     // Prevent default events
     e.preventDefault();
+    helper.hideMessages();
 
     // Get the username and password
     const username = e.target.querySelector('#user').value;
@@ -15,7 +16,7 @@ const handleLogin = (e) => {
 
     // Check if either the username or password fields are empty
     if(!username || !pass) {
-        helper.handleError('Username or password is empty!');
+        helper.handleMessage('Username or password is empty!');
         return false;
     }
 
@@ -27,6 +28,7 @@ const handleLogin = (e) => {
 const handleSignup = (e) => {
     // Prevent default events
     e.preventDefault();
+    helper.hideMessages();
 
     // Grab variables
     const username = e.target.querySelector('#user').value;
@@ -35,7 +37,7 @@ const handleSignup = (e) => {
 
     // Check if any fields are empty
     if(!username || !pass || !pass2) {
-        helper.handleError('All fields are required!');
+        helper.handleMessage('All fields are required!');
         return false;
     }
 
@@ -150,6 +152,10 @@ const LoginWindow = (props) => {
                     >
                         <button className="form-submit" type="submit">LOGIN</button>
                     </motion.div>
+
+                    <div id='message-handler' class='hidden'>
+                        <p id='message-text'></p>
+                    </div>
                 </motion.div>
             </motion.form>
     );
@@ -232,6 +238,10 @@ const SignupWindow = (props) => {
                 >
                     <button className="form-submit" type="submit">SIGN UP</button>
                 </motion.div>
+
+                <div id='message-handler' class='hidden'>
+                    <p id='message-text'></p>
+                </div>
             </motion.div>
         </motion.form>
     );

@@ -248,6 +248,9 @@ const ProfileControls = (props) => {
                 >
                     NEW POST
                 </button>
+                <a id="reset-pass-button" href='/resetpass'>
+                    RESET PASSWORD
+                </a>
             </div>
         </div>
     )

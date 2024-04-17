@@ -5,7 +5,8 @@ module.exports = {
         login: './client/login.jsx',
         homeGuest: './client/homeGuest.jsx',
         home: './client/home.jsx',
-        profile: './client/profile.jsx'
+        profile: './client/profile.jsx',
+        resetPass: './client/resetPass.jsx',
     },
     module : {
         rules: [

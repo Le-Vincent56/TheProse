@@ -1,7 +1,13 @@
+
 // Return an error message through HTML to display for the user
-const handleError = (message) => {
-  console.log(message);
+const handleMessage = (message) => {
+    document.getElementById('message-text').textContent = message;
+    document.getElementById('message-handler').classList.remove('hidden');
 };
+
+const hideMessages = () => {
+  document.getElementById('message-handler').classList.add('hidden');
+}
   
   /* Sends post requests to the server using fetch. Will look for various
      entries in the response JSON object, and will handle them appropriately.
@@ -23,7 +29,7 @@ const sendPost = async (url, data, handler) => {
   
     // If there's an error, process it
     if(result.error) {
-      handleError(result.error);
+      handleMessage(result.error);
     }
 
     // If there's a handler, then send in the result
@@ -33,6 +39,7 @@ const sendPost = async (url, data, handler) => {
 };
 
 module.exports = {
-    handleError,
+    handleMessage,
+    hideMessages,
     sendPost,
 }
