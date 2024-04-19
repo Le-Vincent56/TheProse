@@ -62,6 +62,11 @@ const sendGet = async (url, handler) => {
       handleMessage(result.error);
     }
 
+    // If there's a message, process it
+    if(result.message) {
+      handleMessage(result.message);
+    }
+
   if(handler) {
     handler(result);
   }
