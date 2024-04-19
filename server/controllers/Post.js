@@ -1,6 +1,7 @@
 // Imports
 const url = require('url');
-const query = require('querystring')
+const query = require('querystring');
+const profile = require('./Profile.js');
 const models = require('../models');
 
 const { Post } = models;
@@ -132,9 +133,12 @@ const editPost = async (req, res) => {
 };
 
 const getPosts = async (req, res) => {
+  const parsedURL = url.parse(req.url);
+  const params = query.parse(parsedURL.query);
+
   try {
     // Try to get the posts for the account id
-    const query = { owner: req.session.account._id };
+    const query = { owner: params.id };
     const docs = await Post.find(query).select('title body genre author private id').lean().exec();
 
     // Return the posts in a json

@@ -5,11 +5,10 @@ const models = require('../models');
 const { Account } = models;
 
 const profilePage = (req, res) => {
-    const username = req.session.account.username;
+    const parsedURL = url.parse(req.url);
+    const params = query.parse(parsedURL.query);
 
-    if(req.session.account.username) {
-        res.render('profile', {username: username});
-    }
+    res.render('profile', {username: params.user});
 };
 const resetPass = (req, res) => res.render('resetpass');
 const getProfile = async (req, res) => {
@@ -19,7 +18,14 @@ const getProfile = async (req, res) => {
     try {
         const query = { username: params.user };
         const docs = await Account.find(query).select('username bio createdDate').lean().exec();
-        console.log(JSON.stringify(docs));
+
+        // Check if the current account is the found profile
+        if(req.session.account.username !== params.user) {
+            docs[0].isCurrentUser = false;
+        } else {
+            docs[0].isCurrentUser = true;
+        }
+
         return res.json({profile: docs});
     } catch (err) {
         // Log any errors

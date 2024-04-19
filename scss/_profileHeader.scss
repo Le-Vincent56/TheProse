@@ -1,0 +1,119 @@
+@use 'palette';
+
+@mixin centered {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#profile-header {
+    background-color: palette.$background-color-darker;
+}
+
+#profile-edit-display {
+    position: relative;
+    padding: 10px 15px;
+    left: 100%;
+    transform: translateX(-100%);
+    width: 8%;
+}
+
+#profile-edit-button {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background-color: palette.$secondary-color;
+    font-family: palette.$main-font;
+    box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    cursor: pointer;
+    border: none;
+    height: 40px;
+
+    span {
+        text-align: center;
+        text-decoration: none;
+        width: 100%;
+        padding: 18px 9px;
+        color: palette.$background-color;
+        font-size: 12px;
+        font-weight: 200;
+        z-index: 20;
+        transition: all 0.3s ease-in-out;
+    }
+}
+
+#profile-edit-button:after {
+    content: "";
+    width: 0%;
+    height: 100%;
+    background-color: palette.$primary-color;
+    position: absolute;
+    transition: all 0.4s ease-in-out;
+    right: 0;
+}
+
+#profile-edit-button:hover::after {
+    right: auto;
+    left: 0;
+    width: 100%;
+}
+
+#profile-edit-button:hover span {
+    color: palette.$dark-color;
+    animation: scaleUp 0.3s ease-in-out;
+}
+
+@keyframes scaleUp {
+    0% {
+      transform: scale(1);
+    }
+  
+    50% {
+      transform: scale(0.95);
+    }
+  
+    100% {
+      transform: scale(1);
+    }
+  }
+
+#profile-edit-text {
+    margin: 0;
+}
+
+#profile-account-details {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+}
+
+#profile-username-display {
+    @include centered;
+    margin-top: 30px;
+    width: 75%;
+}
+
+#profile-username-text {
+    font-weight: 600;
+    font-size: 48;
+    margin: 0;
+}
+
+#profile-bio-display {
+    @include centered;
+    margin-top: 20px;
+    width: 50%;
+}
+
+#profile-bio-text {
+    margin: 0;
+}
+
+#profile-date-display {
+    @include centered;
+    width: 60%;
+}

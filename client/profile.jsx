@@ -108,6 +108,12 @@ const loadPageEdit = (editPostData) => {
     root.render(<LoadPage currentState={currentState} postObj={editPostData}/>);
 }
 
+const loadPageEditAccount = (editAccountData) => {
+    // Reload the page with the username to edit the account for
+    const root = createRoot(document.getElementById('content'));
+    root.render(<LoadPage currentState={currentState} accountObj={editAccountData}/>);
+}
+
 const startEdit = async (e, isPosted) => {
     // Get data
     const response = await fetch(`/getPost?id=${e.target.id}`);
@@ -141,6 +147,26 @@ const cancelPost = (e) => {
     //TODO: SAVE POST?
 
     loadPage();
+}
+
+const cancelProfileEdit = (e) => {
+    // Set current state to profile page
+    currentState = 0;
+
+    loadPage();
+}
+
+const startEditProfile = async (e) => {
+    // Get profile
+    const username = document.querySelector('#content').className;
+    const response = await fetch(`/getProfile?user=${username}`);
+    const data = await response.json();
+
+    // Set the current state
+    currentState = 4;
+
+    // Load the edit account page
+    loadPageEditAccount(data.profile[0]);
 }
 
 const collectData = () => {
@@ -249,14 +275,15 @@ const ProfileHeader = (props) => {
 
     useEffect(() => {
         const loadProfileFromServer = async () => {
-            const response = await fetch('/getProfile');
+            const username = document.querySelector('#content').className;
+            const response = await fetch(`/getProfile?user=${username}`);
             const data = await response.json();
-            setProfile(data.profile);
+            setProfile(data.profile[0]);
         };
         loadProfileFromServer();
-    });
+    }, [profile]);
 
-    if(profile === null) {
+    if(profile === undefined) {
         return (
             <div id='profile-header'>
                 <div id='profile-username-display'>
@@ -264,18 +291,57 @@ const ProfileHeader = (props) => {
                 </div>
             </div>
         );
+    } else{
+        let parsedDate = new Date(profile.createdDate);
+        let convertedMonth = parsedDate.toLocaleString('default', {month: 'long'});
+        let dateString = `${convertedMonth} ${parsedDate.getDate()}, ${parsedDate.getFullYear()}`
+
+        let bio = '';
+        if(profile.bio === '') {
+            bio = "[No Biography]"
+        }
+
+        // Return different UI for if the user is looking at their own vs. another profile
+        if(profile.isCurrentUser) {
+            return (
+                <div id='profile-header'>
+                    <div id='profile-edit-display'>
+                        <div id='profile-edit-button'
+                        onClick={(e) => startEditProfile(e)}>
+                            <span id='profile-edit-text'>Edit Profile</span>
+                        </div>
+                    </div>
+                    <div id='profile-account-details'>
+                        <div id='profile-username-display'>
+                            <h1 id='profile-username-text'>{profile.username}</h1>
+                        </div>
+                        <div id='profile-bio-display'>
+                            <p id='profile-bio-text'>{bio}</p>
+                        </div>
+                        <div id='profile-date-display'>
+                            <p id='profile-date-text'>Joined {dateString}</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        } else {
+            return (
+                <div id='profile-header'>
+                    <div id='profile-account-details'>
+                        <div id='profile-username-display'>
+                            <h1 id='profile-username-text'>{profile.username}</h1>
+                        </div>
+                        <div id='profile-bio-display'>
+                            <p id='profile-bio-text'>{bio}</p>
+                        </div>
+                        <div id='profile-date-display'>
+                            <p id='profile-date-text'>Joined {dateString}</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
     }
-
-    return (
-        <div id='profile-header'>
-            <div id='profile-username-display'>
-
-            </div>
-            <div id='profile-bio-display'>
-
-            </div>
-        </div>
-    );
 }
 
 const PostList = (props) => {
@@ -283,7 +349,11 @@ const PostList = (props) => {
 
     useEffect(() => {
         const loadPostsFromServer = async () => {
-            const response = await fetch('/getPosts');
+            const username = document.querySelector('#content').className;
+            const accountResponse = await fetch(`/getProfile?user=${username}`);
+            const accountData = await accountResponse.json();
+
+            const response = await fetch(`/getPosts?id=${accountData.profile[0]._id}`);
             const data = await response.json();
             setPosts(data.posts);
         };
@@ -503,7 +573,7 @@ const PostFormEdit = (props) => {
 const PostFormPosted = (props) => {
     return(
         <form class="form"
-            onSubmit={(e) => {e.preventDefault();}}>
+            onSubmit={(e) => e.preventDefault()}>
             <div class="form-content">
                 <div class="form-header">
                     <div class="form-details-1">
@@ -559,11 +629,50 @@ const PostFormPosted = (props) => {
     );
 }
 
+const ProfileEditorHead = (props) => {
+    return(
+        <div class='profile-form-header'>
+            <div id="control-cancel-post">
+                <div id="cancel-post-button"
+                    onClick={(e) => cancelProfileEdit(e)}>
+                    CANCEL POST
+                </div>
+            </div>
+            <div class='profile-form-label'>
+                <h1 class='profile-form-label-text'>Edit Profile</h1>
+            </div>
+        </div>
+    )
+}
+
+const ProfileEditor = (props) => {
+    return(
+        <form class='profile-form'
+            onSubmit={(e) => e.preventDefault()}>
+            <div class='profile-form-content'>
+                <div class='profile-form-bio'>
+                    <label for="bio">Biography</label>
+                    <textarea name="bio" rows="40" placeholder="" class="bio-area"></textarea>
+                </div>
+            </div>
+            <div class="profile-form-footer">
+                <div class="profile-form-save-btn">
+                    <p class="profile-form-save-text">SAVE DRAFT</p>
+                </div>
+            </div>
+
+            <div id='message-handler' class='hidden'>
+                    <p id='message-text'></p>
+            </div>
+        </form>
+    );
+}
+
 const LoadPage = (props) => {
     const [reloadPosts, setReloadPosts] = useState(false);
 
     useEffect(() => {
-        // If editing, add the current data
+        // If editing a post, add the current data
         if(currentState === 2 || currentState === 3) {
             // Add title
             const title = document.querySelector('#title-input');
@@ -580,6 +689,8 @@ const LoadPage = (props) => {
             // Add body
             const body = document.querySelector('.body-area');
             body.value = props.postObj.body;
+        } else if(currentState == 4) {
+            // If editing a profile, autofill the data
         }
     })
 
@@ -588,10 +699,12 @@ const LoadPage = (props) => {
         // Profile body
         case 0:
             return(
-                <div id="profile-body">
+                <div id="profile">
                     <ProfileHeader/>
-                    <PostList posts={[]} reloadPosts={reloadPosts}/>
-                    <ProfileControls/>
+                    <div id="profile-body">
+                        <PostList posts={[]} reloadPosts={reloadPosts}/>
+                        <ProfileControls/>
+                    </div>
                 </div>
             );
 
@@ -621,6 +734,14 @@ const LoadPage = (props) => {
                     <PostFormPosted postData={props.postObj}/>
                 </div>
             );
+
+        case 4:
+            return(
+                <div id="profile">
+                    <ProfileEditorHead/>
+                    <ProfileEditor/>
+                </div>
+            )
     }
 };
 

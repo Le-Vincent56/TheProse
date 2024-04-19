@@ -23,6 +23,7 @@ const AccountSchema = new mongoose.Schema({
   bio: {
     type: String,
     required: false,
+    default: ""
   },
   createdDate: {
     type: Date,
