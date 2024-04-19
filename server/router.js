@@ -13,7 +13,7 @@ const router = (app) => {
   app.get('/getPost', mid.requiresLogin, controllers.Post.getPost);
   app.get('/getProfile', mid.requiresLogin, controllers.Profile.getProfile);
   app.post('/saveDraft', mid.requiresLogin, controllers.Post.makePost);
-  app.post('/editDraft', mid.requiresLogin, controllers.Post.editPost);
+  app.post('/editPost', mid.requiresLogin, controllers.Post.editPost);
   app.post('/postwork', mid.requiresLogin, controllers.Post.makePost);
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);

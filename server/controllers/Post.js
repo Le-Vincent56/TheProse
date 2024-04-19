@@ -102,7 +102,7 @@ const editPost = async (req, res) => {
 
   try {
     // Get a query and update data
-    const query = { id: req.body.id };
+    const query = { id: postData.id };
     const updatePost = await Post.findOneAndUpdate(
       query,
       {
@@ -143,7 +143,7 @@ const getPost = async (req, res) => {
 
   try {
     const query = {id: params.id};
-    const docs = await Post.find(query).select('title body genre author').lean().exec();
+    const docs = await Post.find(query).select('title body genre author private id').lean().exec();
 
     // Return the post in a json
     return res.json({post: docs});

@@ -108,13 +108,19 @@ const loadPageEdit = (editPostData) => {
     root.render(<LoadPage currentState={currentState} postObj={editPostData}/>);
 }
 
-const startEdit = async (e) => {
+const startEdit = async (e, isPosted) => {
     // Get data
     const response = await fetch(`/getPost?id=${e.target.id}`);
     const data = await response.json();
 
     // Set current state to editing a post
-    currentState = 2;
+    if(isPosted) {
+        // Editing a posted post
+        currentState = 3;
+    } else {
+        // Editing a drafted post
+        currentState = 2;
+    }
 
     // Load the edit page
     loadPageEdit(data.post[0]);
@@ -155,6 +161,7 @@ const collectData = () => {
     // Get body text
     const body = document.querySelector('.body-area').value;
 
+    // Check if all the fields are filled
     if(!title || !author || !postTags || !body) {
         // Send error
         console.log("Missing fields");
@@ -172,47 +179,69 @@ const collectData = () => {
     return postData;
 }
 
-const postWork = (e, onPostAdded) => {
+const postWork = (e) => {
+    // Prevent default events
     e.preventDefault();
     
+    // Collect the post data
     const postData = collectData();
+
+    // Set the post to public
     postData.private = false;
 
     // Post the post
-    helper.sendPost('/postWork', postData, onPostAdded);
+    helper.sendPost('/postWork', postData);
     return false;
 }
 
-const postEdit = (e, onPostAdded) => {
+const postEdit = (e, postID) => {
+    // Prevent default events
     e.preventDefault();
     
+    // Collect the post data
     const postData = collectData();
+    postData.id = postID;
+
+    // Set the post to public
     postData.private = false;
 
     // Post the post
-    helper.sendPost('/editPost', postData, onPostAdded);
+    helper.sendPost('/editPost', postData);
     return false;
 }
 
-const saveDraft = (e, onPostAdded) => {
+const saveDraft = (e) => {
+    // Prevent default events
     e.preventDefault();
 
+    // Collect the post data
     const postData = collectData();
+
+    // Set the post to private
     postData.private = true;
 
     // Post the post
-    helper.sendPost('/saveDraft', postData, onPostAdded);
+    helper.sendPost('/saveDraft', postData);
     return false;
 }
 
-const saveEdit = (e, onPostAdded) => {
+const saveEdit = (e, postID, isPosted) => {
+    // Prevent default events
     e.preventDefault();
 
+    // Collect post data
     const postData = collectData();
-    postData.private = true;
+    postData.id = postID;
+
+    // Set whether or not the post is private
+    if(isPosted) {
+        postData.private = false;
+    } else {
+        postData.private = true;
+    }
 
     // Post the post
-    helper.sendPost('/editPost', postData, onPostAdded);
+    helper.sendPost('/editPost', postData);
 }
 
 const ProfileHeader = (props) => {
@@ -287,10 +316,16 @@ const PostList = (props) => {
         // Determine privacy
         const privacy = post.private ? "Private" : "Public";
         const privacyClass = `post-privacy ${privacy.toLowerCase()}`;
+        let isPosted;
+        if(post.private) {
+            isPosted = false;
+        } else {
+            isPosted = true;
+        }
 
         return(
             <div id={post.id} className="post-node"
-                onClick={(e) => startEdit(e)}>
+                onClick={(e) => startEdit(e, isPosted)}>
                 <div id={post.id} class="post-node-content">
                     <div id={post.id} class="post-header">
                         <h2 id={post.id} class="post-title">{post.title}</h2>
@@ -389,13 +424,17 @@ const PostFormCreate = (props) => {
 
                 <div class="form-footer">
                     <div class="form-save-btn"
-                    onClick={(e) => {saveDraft(e, props.triggerReload)}}>
+                    onClick={(e) => {saveDraft(e)}}>
                         <p class="form-save-text">SAVE DRAFT</p>
                     </div>
                     <div class="form-post-btn"
-                    onClick={(e) => {postWork(e, props.triggerReload)}}>
+                    onClick={(e) => {postWork(e)}}>
                         <p class="form-post-text">POST</p>
                     </div>
+                </div>
+
+                <div id='message-handler' class='hidden'>
+                    <p id='message-text'></p>
                 </div>
             </div>
         </form>
@@ -441,16 +480,79 @@ const PostFormEdit = (props) => {
 
                 <div class="form-footer">
                     <div class="form-save-btn"
-                        onClick={(e) => {saveEdit(e, props.triggerReload)}}>
-                            <p class="form-save-text">SAVE DRAFT</p>
-                        </div>
-                        <div class="form-post-btn"
-                        onClick={(e) => {postEdit(e, props.triggerReload)}}>
-                            <p class="form-post-text">POST</p>
+                        onClick={(e) => {saveEdit(e, props.postData.id, false)}}>
+                        <p class="form-save-text">SAVE DRAFT</p>
+                    </div>
+                    <div class="form-post-btn"
+                        onClick={(e) => {postEdit(e, props.postData.id)}}>
+                        <p class="form-post-text">POST</p>
                     </div>
                     <div class="form-delete-btn">
                         <p class="form-delete-text">DELETE</p>
                     </div>
+                </div>
+
+                <div id='message-handler' class='hidden'>
+                    <p id='message-text'></p>
+                </div>
+            </div>
+        </form>
+    );
+}
+
+const PostFormPosted = (props) => {
+    return(
+        <form class="form"
+            onSubmit={(e) => {e.preventDefault();}}>
+            <div class="form-content">
+                <div class="form-header">
+                    <div class="form-details-1">
+                        <div class="form-detail-title">
+                            <label for="title">TITLE</label>
+                            <input id="title-input" name="title" placeholder="" 
+                            type="text" class="form-input"/>
+                        </div>
+
+                        <div class="form-detail-author">
+                            <label for="author">AUTHOR</label>
+                            <input id="author-input" name="author" placeholder="" type="text" class="form-input"/>
+                        </div>
+                        
+                    </div>
+                    <div class="form-details-2">
+                        <label for="genre">GENRE(S)</label>
+                        <div class="genre-tag-container">
+                            <input id="genre-input" name="genre" placeholder="" type="text"
+                                onFocus={(e) => applyBoxShadow(e)}
+                                onBlur={(e) => revertBoxShadow(e)}
+                                onKeyUp={(e) => createTagEvent(e)}/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-body">
+                    <div class="form-text-area">
+                        <label for="body">BODY</label>
+                        <textarea name="body" rows="40" placeholder="" class="body-area"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <div class="form-recall-btn"
+                        onClick={(e) => {saveEdit(e, props.postData.id, false)}}>
+                        <p class="form-recall-text">RECALL POST</p>
+                    </div>
+                    <div class="form-save-btn"
+                        onClick={(e) => {saveEdit(e, props.postData.id, true)}}>
+                        <p class="form-save-text">SAVE DRAFT</p>
+                    </div>
+                    <div class="form-delete-btn">
+                        <p class="form-delete-text">DELETE</p>
+                    </div>
+                </div>
+
+                <div id='message-handler' class='hidden'>
+                        <p id='message-text'></p>
                 </div>
             </div>
         </form>
@@ -462,7 +564,7 @@ const LoadPage = (props) => {
 
     useEffect(() => {
         // If editing, add the current data
-        if(currentState === 2) {
+        if(currentState === 2 || currentState === 3) {
             // Add title
             const title = document.querySelector('#title-input');
             title.value = value = props.postObj.title;
@@ -498,16 +600,25 @@ const LoadPage = (props) => {
             return(
                 <div id="profile-new-post">
                     <PostControls/>
-                    <PostFormCreate triggerReload={() => setReloadPosts(!reloadPosts)}/>
+                    <PostFormCreate/>
                 </div>
             );
 
-        // Edit post
+        // Edit post draft
         case 2:
             return(
                 <div id="profile-edit-post">
                     <PostControls/>
-                    <PostFormEdit postData={props.postData} triggerReload={() => setReloadPosts(!reloadPosts)}/>
+                    <PostFormEdit postData={props.postObj}/>
+                </div>
+            );
+
+        // Edit posted post
+        case 3:
+            return(
+                <div id="profile-posted-post">
+                    <PostControls/>
+                    <PostFormPosted postData={props.postObj}/>
                 </div>
             );
     }
