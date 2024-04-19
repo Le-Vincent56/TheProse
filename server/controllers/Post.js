@@ -63,6 +63,14 @@ const makePost = async (req, res) => {
     postData.id = Math.floor(Math.random() * 10000);
   }
 
+  // Determine the correct message depending on visibility
+  let messageString = "";
+  if(postData.private) {
+    messageString = "Saved as a draft!"
+  } else {
+    messageString = "Posted!"
+  }
+
   try {
     // Create and save the post using the data and the post model
     const newPost = new Post(postData);
@@ -73,6 +81,7 @@ const makePost = async (req, res) => {
       { 
         title: newPost.title,
         author: newPost.author,
+        message: messageString
       }
     );
   } catch (err) {

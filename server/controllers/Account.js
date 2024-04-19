@@ -49,7 +49,7 @@ const login = (req, res) => {
     req.session.account = Account.toAPI(account);
 
     // Redirect to the profile page
-    return res.json({ redirect: '/profile' });
+    return res.json({ redirect: `/profile?user=${username}` });
   });
 };
 
@@ -82,7 +82,7 @@ const signup = async (req, res) => {
     req.session.account = Account.toAPI(newAccount);
 
     // Redirect back to the profile page
-    return res.json({ redirect: '/profile' });
+    return res.json({ redirect: `/profile?user=${username}` });
   } catch (err) {
     // Log the error
     console.log(err);
