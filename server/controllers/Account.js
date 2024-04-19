@@ -48,8 +48,8 @@ const login = (req, res) => {
     // Save the account to the session cookies and track data
     req.session.account = Account.toAPI(account);
 
-    // Redirect to the /homeUser page
-    return res.json({ redirect: '/home' });
+    // Redirect to the profile page
+    return res.json({ redirect: '/profile' });
   });
 };
 
@@ -81,8 +81,8 @@ const signup = async (req, res) => {
     // Save the account to the session cookies and track data
     req.session.account = Account.toAPI(newAccount);
 
-    // Redirect back to the /homeUser page
-    return res.json({ redirect: '/home' });
+    // Redirect back to the profile page
+    return res.json({ redirect: '/profile' });
   } catch (err) {
     // Log the error
     console.log(err);

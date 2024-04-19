@@ -20,6 +20,10 @@ const PostSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  private: {
+    type: Boolean,
+    required: true,
+  },
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
@@ -41,6 +45,7 @@ PostSchema.statics.toAPI = (doc) => ({
   body: doc.body,
   genre: doc.genre,
   author: doc.author,
+  private: doc.private,
   id: doc.id,
 });
 

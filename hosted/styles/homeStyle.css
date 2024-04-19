@@ -75,17 +75,14 @@ html, body {
 }
 
 .hidden {
-  visibility: hidden;
-}
-
-.visible {
-  visibility: visible;
+  opacity: 0;
 }
 
 #message-handler {
   margin-top: 20px;
   text-align: center;
-  transition: visibility 1s ease-in-out;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
 }
 #message-handler #message-text {
   font-family: "EB Garamond", serif;

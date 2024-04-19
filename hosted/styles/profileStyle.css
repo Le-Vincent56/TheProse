@@ -76,17 +76,14 @@ html, body {
 }
 
 .hidden {
-  visibility: hidden;
-}
-
-.visible {
-  visibility: visible;
+  opacity: 0;
 }
 
 #message-handler {
   margin-top: 20px;
   text-align: center;
-  transition: visibility 1s ease-in-out;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
 }
 #message-handler #message-text {
   font-family: "EB Garamond", serif;
@@ -233,24 +230,27 @@ html, body {
   gap: 20px;
   justify-content: center;
 }
-.form-footer button {
+.form-footer div {
   width: 125px;
   height: 50px;
-  font-family: "EB Garamond", serif;
   cursor: pointer;
   border-radius: 3px;
   border: 1.5px solid #07031A;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   box-shadow: none;
   background-color: #F4F6FF;
+  text-align: center;
 }
-.form-footer button:hover {
+.form-footer div p {
+  font-family: "EB Garamond", serif;
+}
+.form-footer div:hover {
   color: #F4F6FF;
   background-color: #07031A;
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
-.form-footer button:active {
+.form-footer div:active {
   box-shadow: none;
   transform: translateY(0);
 }
@@ -279,10 +279,29 @@ html, body {
   width: 18em;
   max-width: 80%;
 }
-.post-node .post-title {
+.post-node .post-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.post-node .post-header .post-title {
+  flex-grow: 3;
   margin: 0 0 5px;
   width: 10.625em;
   transition: all 0.35s ease;
+}
+.post-node .post-header .post-privacy {
+  text-align: right;
+  flex-grow: 1;
+  margin: 5px 0 0;
+  width: 5.3125em;
+  transition: all 0.35s ease;
+}
+.post-node .post-header .private {
+  color: #a30f05;
+}
+.post-node .post-header .public {
+  color: #04cc1b;
 }
 .post-node .post-author-text {
   font-weight: 500;

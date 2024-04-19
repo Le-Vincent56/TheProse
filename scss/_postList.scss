@@ -25,10 +25,33 @@
         max-width: 80%;
     }
 
-    .post-title {
-        margin: 0 0 5px;
-        width: 10.625em;
-        transition: all 0.35s ease;
+    .post-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+
+        .post-title {
+            flex-grow: 3;
+            margin: 0 0 5px;
+            width: 10.625em;
+            transition: all 0.35s ease;
+        }
+
+        .post-privacy {
+            text-align: right;
+            flex-grow: 1;
+            margin: 5px 0 0;
+            width: 5.3125em;
+            transition: all 0.35s ease;
+        }
+
+        .private {
+            color: palette.$error-color;
+        }
+
+        .public {
+            color: palette.$success-color;
+        }
     }
 
     .post-author-text {

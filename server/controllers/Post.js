@@ -17,6 +17,7 @@ const makePost = async (req, res) => {
     author: req.body.author,
     genre: req.body.genre,
     body: req.body.body,
+    private: req.body.private,
     owner: req.session.account._id,
     id: Math.floor(Math.random() * 1000000)
   };
@@ -95,6 +96,7 @@ const editPost = async (req, res) => {
     body: req.body.body,
     genre: req.body.genre,
     author: req.body.author,
+    private: req.body.private,
     id: req.body.id,
   };
 
@@ -108,9 +110,11 @@ const editPost = async (req, res) => {
         body: postData.body,
         genre: postData.genre,
         author: postData.author,
+        private: postData.private,
       },
     ).lean().exec();
-    return res.status(200).json({ updatePost });
+
+    return res.status(200).json({ updatePost, message: "Updated post!" });
   } catch (err) {
     // Log any errors and return a status code
     console.log(err);
@@ -122,7 +126,7 @@ const getPosts = async (req, res) => {
   try {
     // Try to get the posts for the account id
     const query = { owner: req.session.account._id };
-    const docs = await Post.find(query).select('title body genre author id').lean().exec();
+    const docs = await Post.find(query).select('title body genre author private id').lean().exec();
 
     // Return the posts in a json
     return res.json({ posts: docs });

@@ -12,7 +12,7 @@ const requiresLogin = (req, res, next) => {
 const requiresLogout = (req, res, next) => {
   // If so, redirect them to the app
   if (req.session.account) {
-    return res.redirect('/home');
+    return res.redirect('/profile');
   }
 
   return next();

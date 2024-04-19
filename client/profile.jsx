@@ -137,9 +137,7 @@ const cancelPost = (e) => {
     loadPage();
 }
 
-const postWork = (e, onPostAdded) => {
-    e.preventDefault();
-    
+const collectData = () => {
     // Gather post details
     const title = document.querySelector('#title-input').value;
     const author = document.querySelector('#author-input').value;
@@ -158,7 +156,7 @@ const postWork = (e, onPostAdded) => {
     const body = document.querySelector('.body-area').value;
 
     if(!title || !author || !postTags || !body) {
-        // SEND ERROR
+        // Send error
         console.log("Missing fields");
         return false;
     }
@@ -168,12 +166,87 @@ const postWork = (e, onPostAdded) => {
         title: title,
         author: author,
         genre: postTags,
-        body: body
+        body: body,
     };
+
+    return postData;
+}
+
+const postWork = (e, onPostAdded) => {
+    e.preventDefault();
+    
+    const postData = collectData();
+    postData.private = false;
 
     // Post the post
     helper.sendPost('/postWork', postData, onPostAdded);
     return false;
+}
+
+const postEdit = (e, onPostAdded) => {
+    e.preventDefault();
+    
+    const postData = collectData();
+    postData.private = false;
+
+    // Post the post
+    helper.sendPost('/editPost', postData, onPostAdded);
+    return false;
+}
+
+const saveDraft = (e, onPostAdded) => {
+    e.preventDefault();
+
+    const postData = collectData();
+    postData.private = true;
+
+    // Post the post
+    helper.sendPost('/saveDraft', postData, onPostAdded);
+    return false;
+}
+
+const saveEdit = (e, onPostAdded) => {
+    e.preventDefault();
+
+    const postData = collectData();
+    postData.private = true;
+
+    // Post the post
+    helper.sendPost('/editPost', postData, onPostAdded);
+}
+
+const ProfileHeader = (props) => {
+    const [profile, setProfile] = useState(props.profile);
+
+    useEffect(() => {
+        const loadProfileFromServer = async () => {
+            const response = await fetch('/getProfile');
+            const data = await response.json();
+            setProfile(data.profile);
+        };
+        loadProfileFromServer();
+    });
+
+    if(profile === null) {
+        return (
+            <div id='profile-header'>
+                <div id='profile-username-display'>
+                    <h1>User Not Found</h1>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div id='profile-header'>
+            <div id='profile-username-display'>
+
+            </div>
+            <div id='profile-bio-display'>
+
+            </div>
+        </div>
+    );
 }
 
 const PostList = (props) => {
@@ -211,11 +284,18 @@ const PostList = (props) => {
             }
         }
 
+        // Determine privacy
+        const privacy = post.private ? "Private" : "Public";
+        const privacyClass = `post-privacy ${privacy.toLowerCase()}`;
+
         return(
             <div id={post.id} className="post-node"
                 onClick={(e) => startEdit(e)}>
                 <div id={post.id} class="post-node-content">
-                    <h2 id={post.id} class="post-title">{post.title}</h2>
+                    <div id={post.id} class="post-header">
+                        <h2 id={post.id} class="post-title">{post.title}</h2>
+                        <p id={post.id} class={privacyClass}>{privacy}</p>
+                    </div>
                     <div id={post.id} class="post-author">
                         <h4 id={post.id} class="post-author-text">By: {post.author}</h4>
                     </div>
@@ -253,9 +333,7 @@ const ProfileControls = (props) => {
                 </a>
             </div>
         </div>
-    )
-    
-    
+    );
 }
 
 const PostControls = (props) => {
@@ -310,9 +388,14 @@ const PostFormCreate = (props) => {
                 </div>
 
                 <div class="form-footer">
-                    <button class="form-save-btn">SAVE DRAFT</button>
-                    <button class="form-post-btn"
-                    onClick={(e) => {postWork(e, props.triggerReload)}}>POST</button>
+                    <div class="form-save-btn"
+                    onClick={(e) => {saveDraft(e, props.triggerReload)}}>
+                        <p class="form-save-text">SAVE DRAFT</p>
+                    </div>
+                    <div class="form-post-btn"
+                    onClick={(e) => {postWork(e, props.triggerReload)}}>
+                        <p class="form-post-text">POST</p>
+                    </div>
                 </div>
             </div>
         </form>
@@ -357,10 +440,17 @@ const PostFormEdit = (props) => {
                 </div>
 
                 <div class="form-footer">
-                    <button class="form-save-btn">SAVE DRAFT</button>
-                    <button class="form-post-btn"
-                    onClick={(e) => {postWork(e, props.triggerReload)}}>POST</button>
-                    <button class="form-delete-btn">DELETE</button>
+                    <div class="form-save-btn"
+                        onClick={(e) => {saveEdit(e, props.triggerReload)}}>
+                            <p class="form-save-text">SAVE DRAFT</p>
+                        </div>
+                        <div class="form-post-btn"
+                        onClick={(e) => {postEdit(e, props.triggerReload)}}>
+                            <p class="form-post-text">POST</p>
+                    </div>
+                    <div class="form-delete-btn">
+                        <p class="form-delete-text">DELETE</p>
+                    </div>
                 </div>
             </div>
         </form>
@@ -397,6 +487,7 @@ const LoadPage = (props) => {
         case 0:
             return(
                 <div id="profile-body">
+                    <ProfileHeader/>
                     <PostList posts={[]} reloadPosts={reloadPosts}/>
                     <ProfileControls/>
                 </div>
