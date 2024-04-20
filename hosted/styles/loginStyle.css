@@ -218,11 +218,3 @@ html, body {
   cursor: pointer;
   color: #DCDDE0;
 }
-
-.page-wipe {
-  position: absolute;
-  left: 0;
-  width: 10%;
-  height: 100%;
-  background-color: #F4F6FF;
-}

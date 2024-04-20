@@ -1,0 +1,39 @@
+@use 'friendsList';
+
+@mixin centered {
+    position: relative;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#friends-area {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 40%;
+    margin-right: 35px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px 4px rgba(0, 0, 0, 0.1);
+    height: 720px;
+    max-height: 720px;
+    overflow-y: auto;
+}
+
+#friends-area-header {
+    @include centered;
+    width: 80%;
+
+    #friends-area-header-text {
+        margin: 0;
+    }
+}
+
+#friends-area-controls {
+    @include centered;
+
+    #control-add-friend {
+        width: 100px;
+    }
+}

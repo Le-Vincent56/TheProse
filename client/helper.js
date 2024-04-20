@@ -52,20 +52,20 @@ const sendGet = async (url, handler) => {
   })
 
   const result = await response.json();
-  
-    if(result.redirect) {
-      window.location = result.redirect;
-    }
-  
-    // If there's an error, process it
-    if(result.error) {
-      handleMessage(result.error);
-    }
 
-    // If there's a message, process it
-    if(result.message) {
-      handleMessage(result.message);
-    }
+  if(result.redirect) {
+    window.location = result.redirect;
+  }
+
+  // If there's an error, process it
+  if(result.error) {
+    handleMessage(result.error);
+  }
+
+  // If there's a message, process it
+  if(result.message) {
+    handleMessage(result.message);
+  }
 
   if(handler) {
     handler(result);

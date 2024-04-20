@@ -1,4 +1,6 @@
 const helper = require('./helper.js');
+const profileHelper = require('./profileHelper.js');
+const profileUI = require('./profileUI.js');
 const React = require('react');
 const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
@@ -7,96 +9,10 @@ const {motion} = require('framer-motion');
 let currentState;
 let tags = [];
 
-const applyBoxShadow = (e) => {
-    const tagContainer = document.querySelector('.genre-tag-container');
-    tagContainer.style.outline = 'none';
-    tagContainer.style.border = '0.5px solid black';
-    tagContainer.style.boxShadow = '-5px -5px 0px #07031A';
-    tagContainer.style.backgroundColor = '#F4F6FF';
-}
-
-const revertBoxShadow = (e) => {
-    const tagContainer = document.querySelector('.genre-tag-container');
-    tagContainer.style = "";
-}
-
-const createTag = (label) => {
-    // Set class to tag
-    const div = document.createElement('div');
-    div.setAttribute('class', 'tag');
-
-    // Set the tag label
-    const span = document.createElement('span');
-    span.innerHTML = label;
-
-    // Set the X close button
-    const closeBtn = document.createElement('i');
-    closeBtn.setAttribute('class', 'material-symbols-outlined');
-    closeBtn.setAttribute('data-item', label);
-    closeBtn.innerHTML = 'close';
-
-    // Set event for close button
-    closeBtn.addEventListener('click', (e) => {
-        // Get the stored tag and the index within the array
-        const tag = e.target.getAttribute('data-item');
-        const index = tags.indexOf(tag);
-
-        // remove the tag from the array
-        tags = [...tags.slice(0, index), ...tags.slice(index + 1)];
-
-        // Reload the tags
-        addTags();
-    });
-
-    // Append the children to the div
-    div.appendChild(span);
-    div.appendChild(closeBtn);
-
-    return div;
-}
-
-const createTagEvent = (e) => {
-    if(e.key === 'Enter') {
-        // Sanitizer and store the tag
-        const tagToAdd = e.target.value.trim();
-
-        // If the tag is already included, return
-        if(
-            tags.includes(tagToAdd) ||
-            tags.includes(tagToAdd.toUpperCase()) ||
-            tags.includes(tagToAdd.toLowerCase())
-        ) return;
-
-        // Add the tag to the list
-        tags.push(tagToAdd);
-        addTags();
-
-        // Reset the input value
-        e.target.value = '';
-    }
-}
-
-const resetTags = () => {
-    // Remove all .tag class elements
-    document.querySelectorAll('.tag').forEach((tag) => {
-        tag.parentElement.removeChild(tag);
-    });
-}
-
-const addTags =() => {
-    // Reset tags
-    resetTags();
-
-    // Add a tag for each tag in the tags array
-    // Using .slice().reverse() to put in the right order
-    tags.slice().reverse().forEach((tag) => {
-        const input = createTag(tag);
-        const tagContainer = document.querySelector('.genre-tag-container');
-        tagContainer.prepend(input);
-    });
-}
-
 const loadPage = () => {
+    // Reset tags
+    tags = [];
+
     // Reload the page
     const root = createRoot(document.getElementById('content'));
     root.render(<LoadPage currentState={currentState}/>);
@@ -112,24 +28,6 @@ const loadPageEditAccount = (editAccountData) => {
     // Reload the page with the username to edit the account for
     const root = createRoot(document.getElementById('content'));
     root.render(<LoadPage currentState={currentState} accountObj={editAccountData}/>);
-}
-
-const startEdit = async (e, isPosted) => {
-    // Get data
-    const response = await fetch(`/getPost?id=${e.target.id}`);
-    const data = await response.json();
-
-    // Set current state to editing a post
-    if(isPosted) {
-        // Editing a posted post
-        currentState = 3;
-    } else {
-        // Editing a drafted post
-        currentState = 2;
-    }
-
-    // Load the edit page
-    loadPageEdit(data.post[0]);
 }
 
 const startPost = (e) => {
@@ -156,6 +54,24 @@ const cancelProfileEdit = (e) => {
     loadPage();
 }
 
+const startEdit = async (e, isPosted) => {
+    // Get data
+    const response = await fetch(`/getPost?id=${e.target.id}`);
+    const data = await response.json();
+
+    // Set current state to editing a post
+    if(isPosted) {
+        // Editing a posted post
+        currentState = 3;
+    } else {
+        // Editing a drafted post
+        currentState = 2;
+    }
+
+    // Load the edit page
+    loadPageEdit(data.post[0]);
+}
+
 const startEditProfile = async (e) => {
     // Get profile
     const username = document.querySelector('#content').className;
@@ -169,106 +85,6 @@ const startEditProfile = async (e) => {
     loadPageEditAccount(data.profile[0]);
 }
 
-const collectData = () => {
-    // Gather post details
-    const title = document.querySelector('#title-input').value;
-    const author = document.querySelector('#author-input').value;
-
-    // Gather genre tags
-    const postTags = [];
-    const tagContainers = document.querySelectorAll('.tag');
-    for(const tagContainer of tagContainers) {
-        postTags.push(tagContainer.querySelector('span').innerHTML);
-    }
-
-    // Reset tags
-    tags = [];
-
-    // Get body text
-    const body = document.querySelector('.body-area').value;
-
-    // Check if all the fields are filled
-    if(!title || !author || !postTags || !body) {
-        // Send error
-        console.log("Missing fields");
-        return false;
-    }
-
-    // Assemble the object
-    const postData = {
-        title: title,
-        author: author,
-        genre: postTags,
-        body: body,
-    };
-
-    return postData;
-}
-
-const postWork = (e) => {
-    // Prevent default events
-    e.preventDefault();
-    
-    // Collect the post data
-    const postData = collectData();
-
-    // Set the post to public
-    postData.private = false;
-
-    // Post the post
-    helper.sendPost('/postWork', postData);
-    return false;
-}
-
-const postEdit = (e, postID) => {
-    // Prevent default events
-    e.preventDefault();
-    
-    // Collect the post data
-    const postData = collectData();
-    postData.id = postID;
-
-    // Set the post to public
-    postData.private = false;
-
-    // Post the post
-    helper.sendPost('/editPost', postData);
-    return false;
-}
-
-const saveDraft = (e) => {
-    // Prevent default events
-    e.preventDefault();
-
-    // Collect the post data
-    const postData = collectData();
-
-    // Set the post to private
-    postData.private = true;
-
-    // Post the post
-    helper.sendPost('/saveDraft', postData);
-    return false;
-}
-
-const saveEdit = (e, postID, isPosted) => {
-    // Prevent default events
-    e.preventDefault();
-
-    // Collect post data
-    const postData = collectData();
-    postData.id = postID;
-
-    // Set whether or not the post is private
-    if(isPosted) {
-        postData.private = false;
-    } else {
-        postData.private = true;
-    }
-
-    // Post the post
-    helper.sendPost('/editPost', postData);
-}
 
 const ProfileHeader = (props) => {
     const [profile, setProfile] = useState(props.profile);
@@ -299,6 +115,8 @@ const ProfileHeader = (props) => {
         let bio = '';
         if(profile.bio === '') {
             bio = "[No Biography]"
+        } else {
+            bio = profile.bio;
         }
 
         // Return different UI for if the user is looking at their own vs. another profile
@@ -409,7 +227,7 @@ const PostList = (props) => {
                             <h4 id={post.id} class="post-genre-text">{genreString}</h4>
                         </div>
                         <div id={post.id} class="post-body-preview">
-                            <p id={post.id} class="post-body-preview-text">{post.body.slice(0, 250)}</p>
+                            <p id={post.id} class="post-body-preview-text">{post.body.slice(0, 350)}</p>
                         </div>
                     </div>
                 </div>
@@ -424,23 +242,6 @@ const PostList = (props) => {
     );
 };
 
-const ProfileControls = (props) => {
-    return(
-        <div id="profile-controls">
-            <div id="control-add-post">
-                <button id="add-post-button"
-                    onClick={(e) => startPost(e)}
-                >
-                    NEW POST
-                </button>
-                <a id="reset-pass-button" href='/resetpass'>
-                    RESET PASSWORD
-                </a>
-            </div>
-        </div>
-    );
-}
-
 const PostControls = (props) => {
     return(
         <div id="post-controls">
@@ -453,6 +254,54 @@ const PostControls = (props) => {
             </div>
         </div>
     );
+}
+
+const PostAreaControls = (props) => {
+    return (
+        <div id='post-area-controls'>
+            <div id='control-add-post'>
+                <p class='control-button'
+                    onClick={(e) => startPost(e)}>
+                    NEW POST
+                </p>
+            </div>
+        </div>
+    );
+}
+
+const PostArea = (props) => {
+    return(
+        <div id='post-area'>
+            <div id='post-area-header'>
+                <h1 id='post-area-header-text'>POSTS</h1>
+            </div>
+            <PostAreaControls/>
+            <PostList posts={[]} reloadPosts={props.reloadPosts}/>
+        </div>
+    )
+}
+
+const FriendsAreaControls = (props) => {
+    return (
+        <div id='friends-area-controls'>
+            <div id='control-add-friend'>
+                <p class='control-button'>
+                    ADD FRIEND
+                </p>
+            </div>
+        </div>
+    );
+}
+
+const FriendsArea = (props) => {
+    return (
+        <div id='friends-area'>
+            <div id='friends-area-header'>
+                <h1 id='friends-area-header-text'>FRIENDS</h1>
+            </div>
+            <FriendsAreaControls/>
+        </div>
+    )
 }
 
 const PostFormCreate = (props) => {
@@ -478,9 +327,9 @@ const PostFormCreate = (props) => {
                         <label for="genre">GENRE(S)</label>
                         <div class="genre-tag-container">
                             <input id="genre-input" name="genre" placeholder="" type="text"
-                                onFocus={(e) => applyBoxShadow(e)}
-                                onBlur={(e) => revertBoxShadow(e)}
-                                onKeyUp={(e) => createTagEvent(e)}/>
+                                onFocus={(e) => profileUI.applyBoxShadow(e)}
+                                onBlur={(e) => profileUI.revertBoxShadow(e)}
+                                onKeyUp={(e) => profileUI.createTagEvent(e, tags)}/>
                         </div>
                     </div>
                 </div>
@@ -494,11 +343,11 @@ const PostFormCreate = (props) => {
 
                 <div class="form-footer">
                     <div class="form-save-btn"
-                    onClick={(e) => {saveDraft(e)}}>
+                    onClick={(e) => {profileHelper.saveDraft(e)}}>
                         <p class="form-save-text">SAVE DRAFT</p>
                     </div>
                     <div class="form-post-btn"
-                    onClick={(e) => {postWork(e)}}>
+                    onClick={(e) => {profileHelper.postWork(e)}}>
                         <p class="form-post-text">POST</p>
                     </div>
                 </div>
@@ -534,9 +383,9 @@ const PostFormEdit = (props) => {
                         <label for="genre">GENRE(S)</label>
                         <div class="genre-tag-container">
                             <input id="genre-input" name="genre" placeholder="" type="text"
-                                onFocus={(e) => applyBoxShadow(e)}
-                                onBlur={(e) => revertBoxShadow(e)}
-                                onKeyUp={(e) => createTagEvent(e)}/>
+                                onFocus={(e) => profileUI.applyBoxShadow(e)}
+                                onBlur={(e) => profileUI.revertBoxShadow(e)}
+                                onKeyUp={(e) => profileUI.createTagEvent(e, tags)}/>
                         </div>
                     </div>
                 </div>
@@ -550,11 +399,11 @@ const PostFormEdit = (props) => {
 
                 <div class="form-footer">
                     <div class="form-save-btn"
-                        onClick={(e) => {saveEdit(e, props.postData.id, false)}}>
+                        onClick={(e) => {profileHelper.saveEdit(e, props.postData.id, false)}}>
                         <p class="form-save-text">SAVE DRAFT</p>
                     </div>
                     <div class="form-post-btn"
-                        onClick={(e) => {postEdit(e, props.postData.id)}}>
+                        onClick={(e) => {profileHelper.postEdit(e, props.postData.id)}}>
                         <p class="form-post-text">POST</p>
                     </div>
                     <div class="form-delete-btn">
@@ -593,9 +442,9 @@ const PostFormPosted = (props) => {
                         <label for="genre">GENRE(S)</label>
                         <div class="genre-tag-container">
                             <input id="genre-input" name="genre" placeholder="" type="text"
-                                onFocus={(e) => applyBoxShadow(e)}
-                                onBlur={(e) => revertBoxShadow(e)}
-                                onKeyUp={(e) => createTagEvent(e)}/>
+                                onFocus={(e) => profileUI.applyBoxShadow(e)}
+                                onBlur={(e) => profileUI.revertBoxShadow(e)}
+                                onKeyUp={(e) => profileUI.createTagEvent(e, tags)}/>
                         </div>
                     </div>
                 </div>
@@ -609,11 +458,11 @@ const PostFormPosted = (props) => {
 
                 <div class="form-footer">
                     <div class="form-recall-btn"
-                        onClick={(e) => {saveEdit(e, props.postData.id, false)}}>
+                        onClick={(e) => {profileHelper.saveEdit(e, props.postData.id, false)}}>
                         <p class="form-recall-text">RECALL POST</p>
                     </div>
                     <div class="form-save-btn"
-                        onClick={(e) => {saveEdit(e, props.postData.id, true)}}>
+                        onClick={(e) => {profileHelper.saveEdit(e, props.postData.id, true)}}>
                         <p class="form-save-text">SAVE DRAFT</p>
                     </div>
                     <div class="form-delete-btn">
@@ -635,7 +484,7 @@ const ProfileEditorHead = (props) => {
             <div id="control-cancel-post">
                 <div id="cancel-post-button"
                     onClick={(e) => cancelProfileEdit(e)}>
-                    CANCEL POST
+                    <p>BACK</p>
                 </div>
             </div>
             <div class='profile-form-label'>
@@ -652,12 +501,23 @@ const ProfileEditor = (props) => {
             <div class='profile-form-content'>
                 <div class='profile-form-bio'>
                     <label for="bio">Biography</label>
-                    <textarea name="bio" rows="40" placeholder="" class="bio-area"></textarea>
+                    <textarea name="bio" rows="20" placeholder="" class="bio-area"></textarea>
                 </div>
             </div>
             <div class="profile-form-footer">
                 <div class="profile-form-save-btn">
-                    <p class="profile-form-save-text">SAVE DRAFT</p>
+                    <p class="profile-form-save-text"
+                    onClick={(e) => profileHelper.saveProfileChanges(e, props.profileData._id)}>
+                        SAVE CHANGES
+                    </p>
+                </div>
+                <div class='profile-form-resetpass-btn'
+                onClick={(e) => {
+                    helper.sendGet(`/getResetPass?user=${props.profileData.username}`, 
+                    null)}}>
+                    <p class="profile-form-resetpass-text">
+                        RESET PASSWORD
+                    </p>
                 </div>
             </div>
 
@@ -684,13 +544,15 @@ const LoadPage = (props) => {
 
             // Set tags
             tags = props.postObj.genre;
-            addTags();
+            profileUI.addTags(tags);
 
             // Add body
             const body = document.querySelector('.body-area');
             body.value = props.postObj.body;
         } else if(currentState == 4) {
             // If editing a profile, autofill the data
+            const bio = document.querySelector('.bio-area');
+            bio.value = props.accountObj.bio;
         }
     })
 
@@ -702,8 +564,8 @@ const LoadPage = (props) => {
                 <div id="profile">
                     <ProfileHeader/>
                     <div id="profile-body">
-                        <PostList posts={[]} reloadPosts={reloadPosts}/>
-                        <ProfileControls/>
+                        <PostArea reloadPosts={reloadPosts}/>
+                        <FriendsArea/>
                     </div>
                 </div>
             );
@@ -737,9 +599,9 @@ const LoadPage = (props) => {
 
         case 4:
             return(
-                <div id="profile">
+                <div id="profile-editor">
                     <ProfileEditorHead/>
-                    <ProfileEditor/>
+                    <ProfileEditor profileData={props.accountObj}/>
                 </div>
             )
     }

@@ -13,7 +13,7 @@
     display: flex;
     justify-content: center;
     cursor: pointer;
-    width: 22em;
+    width: 80%;
     max-width: 80%;
     padding: 15px 0;
     background-color: palette.$background-color;
@@ -21,7 +21,7 @@
     transitioN: all 0.35s ease;
 
     .post-node-content {
-        width: 18em;
+        width: 80%;
         max-width: 80%;
     }
 
@@ -108,7 +108,7 @@
 }
 
 .post-node:hover {
-    width: 24em;
+    width: 85%;
     box-shadow: 0 10px 20px 0 rgba(32, 32, 36, 0.12);
 
     .post-hover-content {

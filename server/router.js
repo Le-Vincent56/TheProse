@@ -8,10 +8,12 @@ const router = (app) => {
   
   app.get('/profile', mid.requiresLogin, controllers.Profile.profilePage);
   app.get('/resetpass', mid.requiresSecure, mid.requiresLogin, controllers.Profile.resetPass);
+  app.get('/getResetPass', mid.requiresSecure, mid.requiresLogin, controllers.Profile.getResetPass);
   app.post('/resetpass', mid.requiresSecure, mid.requiresLogin, controllers.Account.resetPass);
   app.get('/getPosts', mid.requiresLogin, controllers.Post.getPosts);
   app.get('/getPost', mid.requiresLogin, controllers.Post.getPost);
   app.get('/getProfile', mid.requiresLogin, controllers.Profile.getProfile);
+  app.post('/editProfile', mid.requiresLogin, controllers.Profile.editProfile);
   app.post('/saveDraft', mid.requiresLogin, controllers.Post.makePost);
   app.post('/editPost', mid.requiresLogin, controllers.Post.editPost);
   app.post('/postwork', mid.requiresLogin, controllers.Post.makePost);

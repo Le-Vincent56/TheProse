@@ -6,7 +6,7 @@ const {motion} = require('framer-motion');
 const handleReset = (e) => {
     // Prevent default events
     e.preventDefault();
-    helper.handleError()
+    helper.hideMessages()
 
     // Grab variables
     const username = e.target.querySelector('#user').value;
@@ -15,7 +15,7 @@ const handleReset = (e) => {
 
     // Check if any fields are empty
     if(!username || !pass || !pass2) {
-        helper.handleError('All fields are required!');
+        helper.handleMessage('All fields are required!');
         return false;
     }
 
@@ -101,6 +101,10 @@ const ResetPasswordWindow = (props) => {
                 >
                     <button className="form-submit" type="submit">RESET</button>
                 </motion.div>
+
+                <motion.div id='message-handler' class='hidden'>
+                    <motion.p id='message-text'></motion.p>
+                </motion.div>
             </motion.div>
         </motion.form>
     )
@@ -123,23 +127,12 @@ const LoadPage = (props) => {
             }}
         >
             <ResetPasswordWindow/>
-            <div id='message-handler' class='hidden'>
-                <p id='message-text'></p>
-            </div>
         </motion.div>
     )
 };
 
 const init = () => {
     const root = createRoot(document.getElementById('content'));
-    // homePage.addEventListener('click', (e) => {
-    //     e.preventDefault();
-
-    //     // Unload page
-
-    //     helper.sendGet('/homeGuest', null);
-    //     return false;
-    // })
 
     // Render the login window
     root.render(<LoadPage/>)

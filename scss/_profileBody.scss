@@ -1,2 +1,45 @@
 @use 'palette';
+@use 'postArea';
+@use 'friendsArea';
 
+@mixin prose-button-div {
+    div {
+        height: 40px;
+        cursor: pointer;
+        border-radius: 3px;
+        border: 1.5px solid palette.$dark-color;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow: none;
+        background-color: palette.$background-color;
+        text-align: center;
+
+        p {
+            margin: 10px 0px 0px 0px;
+            font-family: palette.$main-font;
+        }
+    }
+
+    div:hover {
+        color: palette.$background-color;
+        background-color: palette.$dark-color;
+        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+        transform: translateY(-2px);
+    }
+
+    div:active {
+        box-shadow: none;
+        transform: translateY(0);
+    }
+}
+
+
+#profile-body {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+#post-area-controls, #friends-area-controls {
+    @include prose-button-div;
+}

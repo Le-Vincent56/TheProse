@@ -131,7 +131,7 @@ const resetPass = async (req, res) => {
       ).lean().exec();
 
        // Redirect to the /login page
-      return res.json({ redirect: '/login' });
+      return res.json({ redirect: `/profile?user=${accountData.username}` });
     })
   } catch(err) {
     // Log any errors and return a status code
