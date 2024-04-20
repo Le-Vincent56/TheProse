@@ -5,7 +5,7 @@ const mid = require('./middleware');
 const router = (app) => {
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
-  
+
   app.get('/profile', mid.requiresLogin, controllers.Profile.profilePage);
   app.get('/resetpass', mid.requiresSecure, mid.requiresLogin, controllers.Profile.resetPass);
   app.get('/getResetPass', mid.requiresSecure, mid.requiresLogin, controllers.Profile.getResetPass);

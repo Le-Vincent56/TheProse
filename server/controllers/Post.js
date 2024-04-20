@@ -1,7 +1,6 @@
 // Imports
 const url = require('url');
 const query = require('querystring');
-const profile = require('./Profile.js');
 const models = require('../models');
 
 const { Post } = models;
@@ -20,7 +19,7 @@ const makePost = async (req, res) => {
     body: req.body.body,
     private: req.body.private,
     owner: req.session.account._id,
-    id: Math.floor(Math.random() * 1000000)
+    id: Math.floor(Math.random() * 1000000),
   };
 
   let posts = null;
@@ -28,8 +27,8 @@ const makePost = async (req, res) => {
   // Compare posts
   try {
     // Try to get the posts for the account id
-    const query = { owner: req.session.account._id };
-    posts = await Post.find(query).select('title author id').lean().exec();
+    const postQuery = { owner: req.session.account._id };
+    posts = await Post.find(postQuery).select('title author id').lean().exec();
   } catch (err) {
     // Log any errors and return a status code
     console.log(err);
@@ -37,9 +36,9 @@ const makePost = async (req, res) => {
   }
 
   // Check if the title is unique
-  for(let i = 0; i < posts.length; i++) {
-    if(posts[i].title === postData.title) {
-      return res.status(400).json({error: "A unique title is required"});
+  for (let i = 0; i < posts.length; i++) {
+    if (posts[i].title === postData.title) {
+      return res.status(400).json({ error: 'A unique title is required' });
     }
   }
 
@@ -65,11 +64,11 @@ const makePost = async (req, res) => {
   }
 
   // Determine the correct message depending on visibility
-  let messageString = "";
-  if(postData.private) {
-    messageString = "Saved as a draft!"
+  let messageString = '';
+  if (postData.private) {
+    messageString = 'Saved as a draft!';
   } else {
-    messageString = "Posted!"
+    messageString = 'Posted!';
   }
 
   try {
@@ -79,11 +78,11 @@ const makePost = async (req, res) => {
 
     // Once complete, redirect to the maker page
     return res.status(201).json(
-      { 
+      {
         title: newPost.title,
         author: newPost.author,
-        message: messageString
-      }
+        message: messageString,
+      },
     );
   } catch (err) {
     // If there's an error, log it
@@ -112,9 +111,9 @@ const editPost = async (req, res) => {
 
   try {
     // Get a query and update data
-    const query = { id: postData.id };
+    const postQuery = { id: postData.id };
     const updatePost = await Post.findOneAndUpdate(
-      query,
+      postQuery,
       {
         title: postData.title,
         body: postData.body,
@@ -124,7 +123,7 @@ const editPost = async (req, res) => {
       },
     ).lean().exec();
 
-    return res.status(200).json({ updatePost, message: "Updated post!" });
+    return res.status(200).json({ updatePost, message: 'Updated post!' });
   } catch (err) {
     // Log any errors and return a status code
     console.log(err);
@@ -138,8 +137,8 @@ const getPosts = async (req, res) => {
 
   try {
     // Try to get the posts for the account id
-    const query = { owner: params.id };
-    const docs = await Post.find(query).select('title body genre author private id').lean().exec();
+    const postQuery = { owner: params.id };
+    const docs = await Post.find(postQuery).select('title body genre author private id').lean().exec();
 
     // Return the posts in a json
     return res.json({ posts: docs });
@@ -155,17 +154,17 @@ const getPost = async (req, res) => {
   const params = query.parse(parsedURL.query);
 
   try {
-    const query = {id: params.id};
-    const docs = await Post.find(query).select('title body genre author private id').lean().exec();
+    const postQuery = { id: params.id };
+    const docs = await Post.find(postQuery).select('title body genre author private id').lean().exec();
 
     // Return the post in a json
-    return res.json({post: docs});
+    return res.json({ post: docs });
   } catch (err) {
     // Log any errors and return a status code
     console.log(err);
-    return res.status(500).json({error: 'Error retrieving posts!'});
+    return res.status(500).json({ error: 'Error retrieving posts!' });
   }
-}
+};
 
 // Exports
 module.exports = {

@@ -1,6 +1,6 @@
 // Local imports - imports models/index.js
 const url = require('url');
-const query = require('querystring')
+const query = require('querystring');
 const models = require('../models');
 
 const { Account } = models;
@@ -9,16 +9,16 @@ const loginPage = (req, res) => {
   const parsedURL = url.parse(req.url);
   const params = query.parse(parsedURL.query);
 
-  if(params.signup === "true") {
-    res.render("login", {
-      signup: true
+  if (params.signup === 'true') {
+    res.render('login', {
+      signup: true,
     });
   } else {
-    res.render("login", {
-      signup: false
+    res.render('login', {
+      signup: false,
     });
   }
-}
+};
 
 const logout = (req, res) => {
   // Destroy session cookies to notify the server of logout
@@ -103,42 +103,46 @@ const resetPass = async (req, res) => {
     username: req.body.username,
     password: req.body.pass,
     newPassword: req.body.pass2,
-  }
+  };
 
   // Check if all fields were given
-  if (!accountData.username || !accountData.password 
+  if (!accountData.username || !accountData.password
     || !accountData.newPassword) {
     return res.status(400).json({ error: 'All fields are required!' });
   }
 
   try {
     // Try to get into the account
-    return Account.authenticate(accountData.username, accountData.password, async (err, account) => {
+    return Account.authenticate(
+      accountData.username,
+      accountData.password,
+      async (err, account) => {
       // Check if there's an error, or if the account is invalid
-      if (err || !account) {
-        return res.status(401).json({ error: 'Wrong username or password!' });
-      }
-
-      // Hash the password
-      const hash = await Account.generateHash(accountData.newPassword);
-      const query = {username: accountData.username};
-      const updateAccount = await Account.findOneAndUpdate(
-        query,
-        {
-          username: accountData.username,
-          password: hash,
+        if (err || !account) {
+          return res.status(401).json({ error: 'Wrong username or password!' });
         }
-      ).lean().exec();
 
-       // Redirect to the /login page
-      return res.json({ redirect: `/profile?user=${accountData.username}` });
-    })
-  } catch(err) {
+        // Hash the password
+        const hash = await Account.generateHash(accountData.newPassword);
+        const accountQuery = { username: accountData.username };
+        const updateAccount = await Account.findOneAndUpdate(
+          accountQuery,
+          {
+            username: accountData.username,
+            password: hash,
+          },
+        ).lean().exec();
+
+        // Redirect to the /login page
+        return res.json({ updateAccount, redirect: `/profile?user=${accountData.username}` });
+      },
+    );
+  } catch (err) {
     // Log any errors and return a status code
     console.log(err);
     return res.status(500).json({ error: 'Error editing post!' });
   }
-}
+};
 
 // Exports
 module.exports = {
