@@ -4,10 +4,16 @@ const profileUI = require('./profileUI.js');
 const React = require('react');
 const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
-const {motion} = require('framer-motion');
+const {motion, AnimatePresence} = require('framer-motion');
 
 let currentState;
 let tags = [];
+
+// Framer Variants
+const backdrop = {
+    visible: {opacity: 1},
+    hidden: {opacity: 0}
+}
 
 const loadPage = () => {
     // Reset tags
@@ -85,6 +91,19 @@ const startEditProfile = async (e) => {
     loadPageEditAccount(data.profile[0]);
 }
 
+const showFriendsModal = (e, setShowModal) => {
+    // Show the modal
+    setShowModal(true);
+}
+
+const hideFriendsModal = (e, setShowModal) => {
+    // Hide the modal
+    setShowModal(false);
+}
+
+const searchForUser = (e) => {
+
+}
 
 const ProfileHeader = (props) => {
     const [profile, setProfile] = useState(props.profile);
@@ -285,7 +304,8 @@ const FriendsAreaControls = (props) => {
     return (
         <div id='friends-area-controls'>
             <div id='control-add-friend'>
-                <p class='control-button'>
+                <p class='control-button'
+                    onClick={(e) => showFriendsModal(e, props.setShowModal)}>
                     ADD FRIEND
                 </p>
             </div>
@@ -293,13 +313,42 @@ const FriendsAreaControls = (props) => {
     );
 }
 
+const FriendsModal = (props) => {
+    return (
+        <AnimatePresence>
+            { props.showModal && (
+                <motion.div className='backdrop'
+                    variants={backdrop}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    <motion.div className='friends-modal'>
+                        <div className='friends-modal-header'>
+                            <h1 className='friends-modal-header-text'>ADD FRIEND</h1>
+                            <i className='material-symbols-outlined'
+                            onClick={(e) => hideFriendsModal(e, props.setShowModal)}>close</i>
+                        </div>
+                        <div className='friends-modal-body'>
+                            <input id='friend-search-input' type='text'
+                            name='username-search' placeholder='SEARCH USERNAME' 
+                            onChange={(e) => searchForUser(e)}/>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+    )
+}
+
 const FriendsArea = (props) => {
     return (
         <div id='friends-area'>
+            <FriendsModal showModal={props.showModal}
+                setShowModal={props.setShowModal}/>
             <div id='friends-area-header'>
                 <h1 id='friends-area-header-text'>FRIENDS</h1>
             </div>
-            <FriendsAreaControls/>
+            <FriendsAreaControls setShowModal={props.setShowModal}/>
         </div>
     )
 }
@@ -530,6 +579,7 @@ const ProfileEditor = (props) => {
 
 const LoadPage = (props) => {
     const [reloadPosts, setReloadPosts] = useState(false);
+    const [showFriendsModal, setFriendsModal] = useState(false);
 
     useEffect(() => {
         // If editing a post, add the current data
@@ -565,7 +615,8 @@ const LoadPage = (props) => {
                     <ProfileHeader/>
                     <div id="profile-body">
                         <PostArea reloadPosts={reloadPosts}/>
-                        <FriendsArea/>
+                        <FriendsArea showModal={showFriendsModal}
+                            setShowModal={setFriendsModal}/>
                     </div>
                 </div>
             );

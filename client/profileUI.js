@@ -74,7 +74,7 @@ const resetTags = () => {
     });
 }
 
-const addTags =(tags) => {
+const addTags = (tags) => {
     // Reset tags
     resetTags();
 
@@ -85,6 +85,10 @@ const addTags =(tags) => {
         const tagContainer = document.querySelector('.genre-tag-container');
         tagContainer.prepend(input);
     });
+}
+
+const openFriendsModal = () => {
+    
 }
 
 module.exports = {

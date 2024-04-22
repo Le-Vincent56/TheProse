@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0);
+@import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0);
 #nav-bar {
   width: 100%;
   height: 85px;
@@ -523,6 +524,74 @@ html, body {
 }
 #post-area-controls #control-add-post {
   width: 100px;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+i {
+  cursor: pointer;
+}
+
+i:hover {
+  animation: spin 0.5s;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(90);
+  }
+}
+.friends-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #F4F6FF;
+  border-radius: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.friends-modal-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px 20px;
+  border-bottom: 1px solid #07031A;
+}
+.friends-modal-header .friends-modal-header-text {
+  text-align: left;
+}
+.friends-modal-header i {
+  margin-top: 22.5px;
+  text-align: right;
+}
+
+.friends-modal-body input {
+  position: relative;
+  height: 45px;
+  padding: 15px 8px;
+  width: 95%;
+  font-size: 15px;
+  font-family: "EB Garamond", serif;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 #friends-area {
