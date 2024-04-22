@@ -11,23 +11,6 @@
     z-index: 10;
 }
 
-i {
-    cursor: pointer;
-}
-
-i:hover {
-    animation: spin 0.5s
-}
-
-@keyframes spin {
-    0% {
-        transform: rotateZ(0);
-    }
-    100% {
-        transform: rotateZ(90);
-    }
-}
-
 .friends-modal {
     display: flex;
     flex-direction: column;
@@ -42,6 +25,17 @@ i:hover {
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
+
+    i {
+        margin: 0;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+    }
+    
+    i:hover {
+        animation: spin 0.3s
+    }
 }
 
 .friends-modal-header {
@@ -61,15 +55,19 @@ i:hover {
     }
 }
 
-.friends-modal-body {
-    input {
-        position: relative;
-        height: 45px;
-        padding: 15px 8px;
-        width: 95%;
-        font-size: 15px;
-        font-family: palette.$main-font;
-        left: 50%;
-        transform: translateX(-50%);
+#friend-search-input {
+    position: relative;
+    height: 45px;
+    padding: 15px 8px;
+    width: 95%;
+    font-size: 15px;
+    font-family: palette.$main-font;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(180deg);
     }
 }

@@ -536,22 +536,6 @@ html, body {
   z-index: 10;
 }
 
-i {
-  cursor: pointer;
-}
-
-i:hover {
-  animation: spin 0.5s;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotateZ(0);
-  }
-  100% {
-    transform: rotateZ(90);
-  }
-}
 .friends-modal {
   display: flex;
   flex-direction: column;
@@ -566,6 +550,15 @@ i:hover {
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
+}
+.friends-modal i {
+  margin: 0;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+.friends-modal i:hover {
+  animation: spin 0.3s;
 }
 
 .friends-modal-header {
@@ -583,7 +576,7 @@ i:hover {
   text-align: right;
 }
 
-.friends-modal-body input {
+#friend-search-input {
   position: relative;
   height: 45px;
   padding: 15px 8px;
@@ -594,6 +587,11 @@ i:hover {
   transform: translateX(-50%);
 }
 
+@keyframes spin {
+  100% {
+    transform: rotate(180deg);
+  }
+}
 #friends-area {
   display: flex;
   flex-direction: column;
