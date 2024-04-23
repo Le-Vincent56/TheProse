@@ -526,6 +526,88 @@ html, body {
   width: 100px;
 }
 
+.friends-search-results-container {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 20px;
+  width: 88%;
+  height: 400px;
+  max-height: 400px;
+  text-align: center;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #DCDDE0;
+  box-shadow: rgba(50, 50, 93, 0.1) 0px 30px 50px -12px inset, rgba(0, 0, 0, 0.1) 0px 18px 26px -18px inset;
+  overflow-y: auto;
+}
+
+.search-node {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 98%;
+  height: 100px;
+  background: #F4F6FF;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.search-node-details {
+  flex-grow: 3;
+  padding: 25px 20px 20px 40px;
+  text-align: left;
+}
+.search-node-details .search-node-username {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+.search-node-details .search-node-date {
+  opacity: 55%;
+  margin: 0;
+}
+
+.add-friend-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+}
+.add-friend-container div {
+  height: 40px;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1.5px solid #07031A;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: none;
+  background-color: #F4F6FF;
+  text-align: center;
+}
+.add-friend-container div p {
+  margin: 10px 0px 0px 0px;
+  font-family: "EB Garamond", serif;
+}
+.add-friend-container div:hover {
+  color: #F4F6FF;
+  background-color: #07031A;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+.add-friend-container div:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+.add-friend-container .add-friend-btn {
+  width: 75px;
+  height: 30px;
+}
+.add-friend-container .add-friend-btn-text {
+  margin-top: 5px;
+}
+
 .backdrop {
   position: fixed;
   top: 0;
@@ -624,7 +706,7 @@ html, body {
   transform: translateX(-50%);
 }
 #friends-area-controls #control-add-friend {
-  width: 100px;
+  width: 125px;
 }
 
 #profile-body {

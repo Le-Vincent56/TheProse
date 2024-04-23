@@ -30,7 +30,10 @@ const getProfile = async (req, res) => {
 
   try {
     const profileQuery = { username: params.user };
-    const docs = await Account.find(profileQuery).select('username bio createdDate').lean().exec();
+    const docs = await Account.find(profileQuery)
+                              .select('username bio createdDate')
+                              .lean()
+                              .exec();
 
     // Check if the current account is the found profile
     if (req.session.account.username !== params.user) {
@@ -63,10 +66,52 @@ const editProfile = async (req, res) => {
   }
 };
 
+const getAllProfilesByUsername = async (req, res) => {
+  const parsedURL = url.parse(req.url);
+  const params = query.parse(parsedURL.query);
+
+  try {
+    // If nothing is given, return an empty array
+    if(params.user === '') {
+      return res.status(200).json({profiles: []});
+    }
+
+    // Create a query term and a regular expression to use for further searching
+    const queryTerm = params.user;
+    const regex = new RegExp(queryTerm, 'i');
+
+    // Create a query that includes the query term
+    const profileQuery = {
+      username: { $regex: regex }
+    };
+
+    // Find all users the includes the query term
+    const docs = await Account.find(profileQuery)
+                              .select('username createdDate')
+                              .lean()
+                              .exec();
+
+    // Remove the current user from the search
+    const finalDocs = [];
+    for(const profile of docs) {
+      if(profile.username !== req.session.account.username) {
+        finalDocs.push(profile);
+      }
+    }
+
+    return res.status(200).json({ profiles: finalDocs });
+  } catch (err) {
+    // Log any errors
+    console.log(err);
+    return res.status(500).json({ error: 'Error finding profiles '});
+  }
+}
+
 module.exports = {
   profilePage,
   resetPass,
   getResetPass,
   getProfile,
   editProfile,
+  getAllProfilesByUsername,
 };

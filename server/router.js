@@ -7,6 +7,7 @@ const router = (app) => {
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
 
   app.get('/profile', mid.requiresLogin, controllers.Profile.profilePage);
+  app.get('/searchProfiles', mid.requiresLogin, controllers.Profile.getAllProfilesByUsername);
   app.get('/resetpass', mid.requiresSecure, mid.requiresLogin, controllers.Profile.resetPass);
   app.get('/getResetPass', mid.requiresSecure, mid.requiresLogin, controllers.Profile.getResetPass);
   app.post('/resetpass', mid.requiresSecure, mid.requiresLogin, controllers.Account.resetPass);
