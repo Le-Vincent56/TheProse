@@ -144,6 +144,40 @@ const resetPass = async (req, res) => {
   }
 };
 
+const addFriend = async (req, res) => {
+  // Retrieve data
+  const friendData = {
+    accountID: req.body.accountID
+  };
+
+  try {
+    // Query for the current account
+    const profileQuery = { username: req.session.account.username };
+    const currentAccount = await Account.find(profileQuery)
+                                  .select('friends')
+                                  .lean()
+                                  .exec();
+
+    // Update the current list of friends
+    let currentFriends = currentAccount[0].friends;
+    currentFriends.push(friendData.accountID);
+
+    // Update the current account
+    const updatedAccount = await Account.findOneAndUpdate(
+      profileQuery,
+      {
+        friends: currentFriends
+      }
+    );
+
+    return res.json({updatedAccount, message: 'Added friend!'});
+  } catch (err) {
+    // Log any errors and return a status code
+    console.log(err);
+    return res.status(500).json({ error: 'Error adding friend!' });
+  }
+}
+
 // Exports
 module.exports = {
   loginPage,
@@ -151,4 +185,5 @@ module.exports = {
   login,
   signup,
   resetPass,
+  addFriend,
 };

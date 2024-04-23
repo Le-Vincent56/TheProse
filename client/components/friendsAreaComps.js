@@ -1,6 +1,7 @@
 const React = require('react');
 const {useState, useEffect} = React;
 const {motion, AnimatePresence} = require('framer-motion');
+const helper = require('../helper.js');
 
 // Framer Variants
 const backdrop = {
@@ -28,6 +29,11 @@ const searchForUser = async (e, setSearchedFriends) => {
     loadProfilesFromServer();
 }
 
+const addFriend = async (e, userID, onAccountAdded) => {
+    helper.sendPost('/addFriend', {accountID: userID}, onAccountAdded);
+    return false;
+}
+
 const FriendsAreaControls = (props) => {
     return (
         <div id='friends-area-controls'>
@@ -41,7 +47,40 @@ const FriendsAreaControls = (props) => {
     );
 }
 
-const FriendsSearchList = (props) => {
+const AddFriendButton = (props) => {
+    if(props.profile.isFriend) {
+        return (
+            <div className='add-friend-container'>
+                <div className="add-friend-btn-disabled">
+                    <p className="add-friend-btn-text">ADDED</p>
+                </div>
+            </div>
+        )
+    }
+    
+    return (
+        <div className='add-friend-container'>
+            <div className="add-friend-btn"
+            onClick={(e) => addFriend(e, props.profile._id, props.triggerReload)}>
+                <p className="add-friend-btn-text">ADD</p>
+            </div>
+        </div>
+    );
+}
+
+const FriendsSearchList =  (props) => {
+    const [reloadSearchedFriends, setReload] = useState(false);
+
+    useEffect(() => {
+        const loadProfilesFromServer = async () => {
+            const username = document.querySelector('#friend-search-input').value;
+            const response = await fetch(`/searchProfiles?user=${username}`);
+            const data = await response.json();
+            props.setSearchedFriends(data.profiles);
+        };
+        loadProfilesFromServer();
+    }, [reloadSearchedFriends]);
+
     if(props.searchedFriends.length === 0) {
         return (
             <div className='friends-search-results-container'>
@@ -54,7 +93,7 @@ const FriendsSearchList = (props) => {
         // Parse the date into a readable string
         let parsedDate = new Date(user.createdDate);
         let convertedMonth = parsedDate.toLocaleString('default', {month: 'long'});
-        let dateString = `${convertedMonth} ${parsedDate.getDate()}, ${parsedDate.getFullYear()}`
+        let dateString = `${convertedMonth} ${parsedDate.getDate()}, ${parsedDate.getFullYear()}`;
 
         return (
             <div className='search-node'>
@@ -62,11 +101,7 @@ const FriendsSearchList = (props) => {
                     <p className='search-node-username'>{user.username}</p>
                     <p className='search-node-date'>{dateString}</p>
                 </div>
-                <div className='add-friend-container'>
-                    <div className="add-friend-btn">
-                        <p className="add-friend-btn-text">ADD</p>
-                    </div>
-                </div>
+                <AddFriendButton profile={user} triggerReload={() => setReload(!reloadSearchedFriends)}/>
             </div>
         );
     });
@@ -101,7 +136,8 @@ const FriendsModal = (props) => {
                                 name='username-search' placeholder='SEARCH USERNAME' 
                                 onChange={(e) => searchForUser(e, setSearchedFriends)}/>
                             </div>
-                            <FriendsSearchList searchedFriends={searchedFriends}/>
+                            <FriendsSearchList searchedFriends={searchedFriends} 
+                            setSearchedFriends={setSearchedFriends}/>
                         </div>
                     </motion.div>
                 </motion.div>
@@ -111,7 +147,6 @@ const FriendsModal = (props) => {
 }
 
 const FriendsArea = (props) => {
-
     return (
         <div id='friends-area'>
             <FriendsModal searchedFriends={[]} showModal={props.showModal}

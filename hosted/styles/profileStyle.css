@@ -576,8 +576,9 @@ html, body {
   justify-content: center;
   margin: auto;
 }
-.add-friend-container div {
-  height: 40px;
+.add-friend-container .add-friend-btn {
+  width: 75px;
+  height: 30px;
   cursor: pointer;
   border-radius: 3px;
   border: 1.5px solid #07031A;
@@ -586,23 +587,23 @@ html, body {
   background-color: #F4F6FF;
   text-align: center;
 }
-.add-friend-container div p {
-  margin: 10px 0px 0px 0px;
-  font-family: "EB Garamond", serif;
-}
-.add-friend-container div:hover {
+.add-friend-container .add-friend-btn:hover {
   color: #F4F6FF;
   background-color: #07031A;
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
-.add-friend-container div:active {
+.add-friend-container .add-friend-btn:active {
   box-shadow: none;
   transform: translateY(0);
 }
-.add-friend-container .add-friend-btn {
+.add-friend-container .add-friend-btn-disabled {
   width: 75px;
   height: 30px;
+  border-radius: 3px;
+  border: 1.5px solid #07031A;
+  background-color: #DCDDE0;
+  text-align: center;
 }
 .add-friend-container .add-friend-btn-text {
   margin-top: 5px;

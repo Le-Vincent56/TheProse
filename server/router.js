@@ -14,6 +14,7 @@ const router = (app) => {
   app.get('/getPosts', mid.requiresLogin, controllers.Post.getPosts);
   app.get('/getPost', mid.requiresLogin, controllers.Post.getPost);
   app.get('/getProfile', mid.requiresLogin, controllers.Profile.getProfile);
+  app.post('/addFriend', mid.requiresLogin, controllers.Account.addFriend);
   app.post('/editProfile', mid.requiresLogin, controllers.Profile.editProfile);
   app.post('/saveDraft', mid.requiresLogin, controllers.Post.makePost);
   app.post('/editPost', mid.requiresLogin, controllers.Post.editPost);

@@ -1,35 +1,5 @@
 @use 'palette';
 
-@mixin prose-button-div {
-    div {
-        height: 40px;
-        cursor: pointer;
-        border-radius: 3px;
-        border: 1.5px solid palette.$dark-color;
-        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-        box-shadow: none;
-        background-color: palette.$background-color;
-        text-align: center;
-
-        p {
-            margin: 10px 0px 0px 0px;
-            font-family: palette.$main-font;
-        }
-    }
-
-    div:hover {
-        color: palette.$background-color;
-        background-color: palette.$dark-color;
-        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-        transform: translateY(-2px);
-    }
-
-    div:active {
-        box-shadow: none;
-        transform: translateY(0);
-    }
-}
-
 .friends-search-results-container {
     position: relative;
     left: 50%;
@@ -79,7 +49,6 @@
 }
 
 .add-friend-container {
-    @include prose-button-div;
     flex-grow: 1;
     display: flex;
     justify-content: center;
@@ -88,6 +57,34 @@
     .add-friend-btn {
         width: 75px;
         height: 30px;
+        cursor: pointer;
+        border-radius: 3px;
+        border: 1.5px solid palette.$dark-color;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow: none;
+        background-color: palette.$background-color;
+        text-align: center;
+    }
+
+    .add-friend-btn:hover {
+        color: palette.$background-color;
+        background-color: palette.$dark-color;
+        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+        transform: translateY(-2px);
+    }
+
+    .add-friend-btn:active {
+        box-shadow: none;
+        transform: translateY(0);
+    }
+    
+    .add-friend-btn-disabled {
+        width: 75px;
+        height: 30px;
+        border-radius: 3px;
+        border: 1.5px solid palette.$dark-color;
+        background-color: palette.$background-color-darker;
+        text-align: center;
     }
 
     .add-friend-btn-text {

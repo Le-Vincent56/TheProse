@@ -2,7 +2,7 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 
-// Define the number of times we will has the password
+// Define the number of times we will hash the password
 const saltRounds = 10;
 
 let AccountModel = {};
@@ -20,6 +20,10 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  friends: {
+    type: [mongoose.Schema.ObjectId],
+    required: false,
+  },
   bio: {
     type: String,
     required: false,
@@ -35,6 +39,7 @@ const AccountSchema = new mongoose.Schema({
 AccountSchema.statics.toAPI = (doc) => ({
   username: doc.username,
   bio: doc.bio,
+  friends: doc.friends,
   createdDate: doc.createdDate,
   _id: doc._id,
 });

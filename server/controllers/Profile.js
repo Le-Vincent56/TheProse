@@ -99,6 +99,14 @@ const getAllProfilesByUsername = async (req, res) => {
       }
     }
 
+    const userQuery = {username: req.session.account.username};
+    const currentAccount = await Account.find(userQuery).select('friends').lean().exec();
+
+    // See if the use is already friends with the found profile
+    for (const profile of finalDocs) {
+      profile.isFriend = currentAccount[0].friends.some(friendId => friendId.equals(profile._id));
+    }
+
     return res.status(200).json({ profiles: finalDocs });
   } catch (err) {
     // Log any errors

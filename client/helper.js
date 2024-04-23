@@ -1,8 +1,10 @@
 
 // Return an error message through HTML to display for the user
 const handleMessage = (message) => {
+  if(document.getElementById('message-text') !== null) {
     document.getElementById('message-text').textContent = message;
     document.getElementById('message-handler').classList.remove('hidden');
+  }
 };
 
 const hideMessages = () => {
