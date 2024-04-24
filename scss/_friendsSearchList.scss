@@ -68,9 +68,10 @@
 
     .add-friend-btn:hover {
         color: palette.$background-color;
-        background-color: palette.$dark-color;
+        background-color: palette.$success-color;
         box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
         transform: translateY(-2px);
+        border-color: palette.$success-color;
     }
 
     .add-friend-btn:active {

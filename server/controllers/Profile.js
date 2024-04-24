@@ -11,6 +11,14 @@ const profilePage = (req, res) => {
 
   res.render('profile', { username: params.user });
 };
+
+const redirectProfile = (req, res) => {
+  const parsedURL = url.parse(req.url);
+  const params = query.parse(parsedURL.query);
+
+  return res.json({redirect: `/profile?user=${params.user}`});
+}
+
 const resetPass = (req, res) => {
   const parsedURL = url.parse(req.url);
   const params = query.parse(parsedURL.query);
@@ -29,7 +37,13 @@ const getProfile = async (req, res) => {
   const params = query.parse(parsedURL.query);
 
   try {
-    const profileQuery = { username: params.user };
+    let profileQuery;
+    if(params.user) {
+      profileQuery = { username: params.user };
+    } else if(params.id) {
+      profileQuery = { _id: params.id };
+    }
+
     const docs = await Account.find(profileQuery)
                               .select('username bio createdDate')
                               .lean()
@@ -113,13 +127,34 @@ const getAllProfilesByUsername = async (req, res) => {
     console.log(err);
     return res.status(500).json({ error: 'Error finding profiles '});
   }
-}
+};
+
+const getFriends = async (req, res) => {
+  const parsedURL = url.parse(req.url);
+  const params = query.parse(parsedURL.query);
+
+  try {
+    const profileQuery = { username: params.user };
+    const docs = await Account.find(profileQuery)
+                              .select('friends')
+                              .lean()
+                              .exec();
+
+    return res.json({ profile: docs });
+  } catch (err) {
+    // Log any errors
+    console.log(err);
+    return res.status(500).json({ error: 'Error receiving profile' });
+  }
+};
 
 module.exports = {
   profilePage,
+  redirectProfile,
   resetPass,
   getResetPass,
   getProfile,
   editProfile,
   getAllProfilesByUsername,
+  getFriends,
 };

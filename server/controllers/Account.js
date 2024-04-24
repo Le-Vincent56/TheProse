@@ -178,6 +178,45 @@ const addFriend = async (req, res) => {
   }
 }
 
+const removeFriend = async (req, res) => {
+  // Retrieve data
+  const friendData = {
+    accountID: req.body.accountID
+  };
+
+  try {
+    // Query for the current account
+    const profileQuery = { username: req.session.account.username };
+    const currentAccount = await Account.find(profileQuery)
+                                  .select('friends')
+                                  .lean()
+                                  .exec();
+
+    // Gather the current list of friends
+    let currentFriends = currentAccount[0].friends;
+
+    // Update the list of friends (remove the posted ID)
+    let updatedFriendsArray = [];
+    for(const friend of currentFriends) {
+      if(!friend.equals(friendData.accountID)) {
+        updatedFriendsArray.push(friend);
+      }
+    }
+
+    // Update the account
+    const updatedAccount = await Account.findOneAndUpdate(
+      profileQuery,
+      { friends: updatedFriendsArray }
+    );
+
+    return res.json({updatedAccount, message: 'Removed friend!'});
+  } catch (err) {
+    // Log any errors and return a status code
+    console.log(err);
+    return res.status(500).json({ error: 'Error adding friend!' });
+  }
+}
+
 // Exports
 module.exports = {
   loginPage,
@@ -186,4 +225,5 @@ module.exports = {
   signup,
   resetPass,
   addFriend,
+  removeFriend,
 };

@@ -589,9 +589,10 @@ html, body {
 }
 .add-friend-container .add-friend-btn:hover {
   color: #F4F6FF;
-  background-color: #07031A;
+  background-color: #04cc1b;
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
+  border-color: #04cc1b;
 }
 .add-friend-container .add-friend-btn:active {
   box-shadow: none;
@@ -675,6 +676,109 @@ html, body {
     transform: rotate(180deg);
   }
 }
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.friend-node {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  width: 80%;
+  max-width: 80%;
+  padding: 15px 0;
+  background-color: #F4F6FF;
+  box-shadow: 0 0 6px 0 rgba(32, 32, 36, 0.12);
+  transitioN: all 0.35s ease;
+}
+.friend-node .friend-node-content {
+  width: 80%;
+  max-width: 80%;
+  display: flex;
+  flex-direction: row;
+}
+.friend-node .friend-node-content .friend-node-details {
+  flex-grow: 4;
+}
+.friend-node .friend-node-content .friend-node-details .friend-username {
+  text-overflow: ellipsis;
+}
+.friend-node .friend-node-content .remove-friend-container {
+  margin-top: 12.5px;
+  flex-grow: 0.5;
+}
+.friend-node .friend-node-content .remove-friend-container div {
+  height: 40px;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1.5px solid #07031A;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: none;
+  background-color: #F4F6FF;
+  text-align: center;
+}
+.friend-node .friend-node-content .remove-friend-container div p {
+  margin: 10px 0px 0px 0px;
+  font-family: "EB Garamond", serif;
+}
+.friend-node .friend-node-content .remove-friend-container div:hover {
+  color: #F4F6FF;
+  background-color: #a30f05;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+  border-color: #a30f05;
+}
+.friend-node .friend-node-content .remove-friend-container div:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.friend-node::before, .friend-node::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #4F8A8B;
+  height: 4px;
+}
+
+.friend-node::before {
+  width: 0;
+  opacity: 0;
+  transition: opacity 0 ease, width 0 ease;
+  transition-delay: 0.5s;
+}
+
+.friend-node::after {
+  width: 100%;
+  background-color: #F4F6FF;
+  transition: width 0.5s ease;
+}
+
+.friend-node:hover {
+  width: 85%;
+  box-shadow: 0 10px 20px 0 rgba(32, 32, 36, 0.12);
+}
+
+.friend-node:hover::before {
+  width: 100%;
+  opacity: 1;
+  transition: opacity 0.5s ease, width 0.5s ease;
+  transition-delay: 0;
+}
+
+.friend-node:hover::after {
+  width: 0;
+  opacity: 0;
+  transition: width 0 ease;
+}
+
 #friends-area {
   display: flex;
   flex-direction: column;

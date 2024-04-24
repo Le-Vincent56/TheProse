@@ -177,6 +177,7 @@ const ProfileHeader = (props) => {
 
 const LoadPage = (props) => {
     const [reloadPosts, setReloadPosts] = useState(false);
+    const [reloadFriends, setReloadFriends] = useState(false);
     const [showFriendsModal, setFriendsModal] = useState(false);
 
     useEffect(() => {
@@ -214,7 +215,8 @@ const LoadPage = (props) => {
                     <div id="profile-body">
                         <PostArea startPost={startPost} startEdit={startEdit} reloadPosts={reloadPosts}/>
                         <FriendsArea showModal={showFriendsModal}
-                            setShowModal={setFriendsModal}/>
+                            setShowModal={setFriendsModal} reloadFriends={reloadFriends}
+                            triggerReload={() => setReloadFriends(!reloadFriends)}/>
                     </div>
                 </div>
             );
