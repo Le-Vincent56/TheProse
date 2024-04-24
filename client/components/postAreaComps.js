@@ -108,26 +108,58 @@ const PostList = (props) => {
 };
 
 const PostAreaControls = (props) => {
-    return (
-        <div id='post-area-controls'>
-            <div id='control-add-post'>
-                <p class='control-button'
-                    onClick={(e) => props.startPost(e)}>
-                    NEW POST
-                </p>
+    const [hitMaxPosts, setHitMaxPosts] = useState(false);
+
+    useEffect(() => {
+        const getUserPosts = async () => {
+            // Check if a maximum limit needs to be checked
+            if(props.profile.premium) {
+                return setHitMaxPosts(false);
+            } else {
+                const response = await fetch(`/getPosts?id=${props.profile._id}`);
+                const data = await response.json();
+
+                // Check if the user has posted less than the limit
+                setHitMaxPosts(data.posts.length >= 1);
+            }
+        }
+        getUserPosts();
+    }, [props.profile, props.reloadPosts])
+
+    if(hitMaxPosts) {
+        return (
+            <div id='post-area-controls'>
+                <div id='control-add-post-disabled'>
+                    <p class='control-button'>
+                        NEW POST
+                    </p>
+                </div>
             </div>
-        </div>
-    );
+        )
+    } else {
+        return (
+            <div id='post-area-controls'>
+                <div id='control-add-post'>
+                    <p class='control-button'
+                        onClick={(e) => props.startPost(e)}>
+                        NEW POST
+                    </p>
+                </div>
+            </div>
+        );
+    }
 }
 
 const PostArea = (props) => {
     if(props.profile.isCurrentUser) {
+        let maximumPosts = props.profile.premium ? "UNLIMITED" : "MAX. 5"
         return(
             <div id='post-area'>
                 <div id='post-area-header'>
                     <h1 id='post-area-header-text'>POSTS</h1>
+                    <h3 id='post-header-max-posts'>{maximumPosts}</h3>
                 </div>
-                <PostAreaControls startPost={props.startPost}/>
+                <PostAreaControls startPost={props.startPost} profile={props.profile}/>
                 <PostList profile={props.profile}
                 startEdit={props.startEdit} posts={[]} reloadPosts={props.reloadPosts}/>
             </div>

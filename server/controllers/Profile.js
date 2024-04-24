@@ -16,7 +16,7 @@ const redirectProfile = (req, res) => {
   const parsedURL = url.parse(req.url);
   const params = query.parse(parsedURL.query);
 
-  return res.json({ redirect: `/profile?user=${params.user}` });
+  return res.status(200).json({ redirect: `/profile?user=${params.user}` });
 };
 
 const resetPass = (req, res) => {
@@ -29,7 +29,7 @@ const getResetPass = (req, res) => {
   const parsedURL = url.parse(req.url);
   const params = query.parse(parsedURL.query);
 
-  return res.json({ redirect: `/resetpass?user=${params.user}` });
+  return res.status(200).json({ redirect: `/resetpass?user=${params.user}` });
 };
 
 const getProfile = async (req, res) => {
@@ -45,7 +45,7 @@ const getProfile = async (req, res) => {
     }
 
     const docs = await Account.find(profileQuery)
-      .select('username bio createdDate')
+      .select('username bio premium createdDate')
       .lean()
       .exec();
 
@@ -56,7 +56,7 @@ const getProfile = async (req, res) => {
       docs[0].isCurrentUser = true;
     }
 
-    return res.json({ profile: docs });
+    return res.status(200).json({ profile: docs });
   } catch (err) {
     // Log any errors
     console.log(err);
@@ -142,11 +142,11 @@ const getFriends = async (req, res) => {
       .lean()
       .exec();
 
-    return res.json({ profile: docs });
+    return res.status(200).json({ profile: docs });
   } catch (err) {
     // Log any errors
     console.log(err);
-    return res.status(500).json({ error: 'Error receiving profile' });
+    return res.status(500).json({ error: 'Error receiving friends' });
   }
 };
 
@@ -157,15 +157,50 @@ const getFriendData = async (req, res) => {
   try {
     const profileQuery = { username: params.user };
     const docs = await Account.find(profileQuery)
-                              .select('friends followers')
-                              .lean()
-                              .exec();
+      .select('friends followers')
+      .lean()
+      .exec();
 
-    return res.json({friends: docs});
+    return res.status(200).json({ friends: docs });
   } catch (err) {
     // Log any errors
     console.log(err);
-    return res.status(500).json({ error: 'Error getting followers' });
+    return res.status(500).json({ error: 'Error getting friend data' });
+  }
+};
+
+const getFollowers = async (req, res) => {
+  const parsedURL = url.parse(req.url);
+  const params = query.parse(parsedURL.query);
+
+  try {
+    const profileQuery = { username: params.user };
+    const docs = await Account.find(profileQuery)
+      .select('followers')
+      .lean()
+      .exec();
+
+    return res.status(200).json({ profile: docs });
+  } catch (err) {
+    // Log any errors
+    console.log(err);
+    return res.status(500).json({ error: 'Error receiving followers' });
+  }
+};
+
+const updatePremium = async (req, res) => {
+  try {
+    const profileQuery = { username: req.session.account.username };
+    const docs = await Account.findOneAndUpdate(
+      profileQuery,
+      { premium: req.body.premium },
+    ).lean().exec();
+
+    return res.status(200).json({ profile: docs });
+  } catch (err) {
+    // Log any errors
+    console.log(err);
+    return res.status(500).json({ error: 'Error editing profile' });
   }
 }
 
@@ -179,4 +214,6 @@ module.exports = {
   getAllProfilesByUsername,
   getFriends,
   getFriendData,
+  getFollowers,
+  updatePremium,
 };

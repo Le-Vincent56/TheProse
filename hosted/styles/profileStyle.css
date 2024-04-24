@@ -91,6 +91,53 @@ html, body {
   color: #a30f05;
 }
 
+#post-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 25px;
+}
+#post-header #cancel-post-btn-container div {
+  width: 125px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1.5px solid #07031A;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: none;
+  background-color: #F4F6FF;
+  text-align: center;
+}
+#post-header #cancel-post-btn-container div p {
+  font-family: "EB Garamond", serif;
+}
+#post-header #cancel-post-btn-container div:hover {
+  color: #F4F6FF;
+  background-color: #07031A;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+#post-header #cancel-post-btn-container div:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+#post-header #cancel-post-btn-container div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
+#post-header #cancel-post-btn-container div p {
+  margin: 0;
+}
+#post-header #post-header-label {
+  margin-left: 40px;
+}
+#post-header #post-header-label h1 {
+  font-size: 36px;
+  margin: 0;
+}
+
 .form-content {
   position: relative;
   display: flex;
@@ -251,13 +298,13 @@ html, body {
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
-.form-footer .form-delete-btn:hover {
-  background-color: #a30f05;
-  border-color: #a30f05;
-}
 .form-footer div:active {
   box-shadow: none;
   transform: translateY(0);
+}
+.form-footer .form-delete-btn:hover {
+  background-color: #a30f05;
+  border-color: #a30f05;
 }
 
 #profile-header {
@@ -265,12 +312,57 @@ html, body {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 50px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
 }
 
-#profile-edit-display {
+#profile-control-display {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
   position: relative;
   padding: 10px 15px;
   left: 100%;
   transform: translateX(-100%);
-  width: 8%;
+  width: 330px;
+}
+#profile-control-display #premium-btn-container {
+  box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+}
+#profile-control-display #premium-btn-container div {
+  width: 145px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: none;
+  text-align: center;
+  border: 1.5px solid transparent;
+}
+#profile-control-display #premium-btn-container div p {
+  font-size: 16px;
+  margin: 10px 0px 0px 0px;
+  font-family: "EB Garamond", serif;
+}
+#profile-control-display #premium-btn-container div:hover {
+  transform: translateY(-2px);
+}
+#profile-control-display #premium-btn-container div:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+#profile-control-display #premium-btn-container #profile-premium-button-active {
+  background-color: #FBD46D;
+}
+#profile-control-display #premium-btn-container #profile-premium-button-active:hover {
+  color: #F4F6FF;
+  background-color: #4F8A8B;
+  border: 1.5px solid #4F8A8B;
+}
+#profile-control-display #premium-btn-container #profile-premium-button-inactive {
+  background-color: #4F8A8B;
+  color: #F4F6FF;
+}
+#profile-control-display #premium-btn-container #profile-premium-button-inactive:hover {
+  color: #07031A;
+  background-color: #FBD46D;
+  border: 1.5px solid #FBD46D;
 }
 
 #profile-edit-button {
@@ -278,14 +370,15 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 5px;
+  border-radius: 3px;
   background-color: #4F8A8B;
   font-family: "EB Garamond", serif;
   box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   cursor: pointer;
-  border: none;
+  border: 1.5px solid transparent;
   height: 40px;
+  width: 145px;
 }
 #profile-edit-button span {
   text-align: center;
@@ -293,7 +386,7 @@ html, body {
   width: 100%;
   padding: 18px 9px;
   color: #F4F6FF;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 200;
   z-index: 20;
   transition: all 0.3s ease-in-out;
@@ -515,9 +608,21 @@ html, body {
   left: 50%;
   transform: translateX(-50%);
   width: 80%;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+#post-area-header #post-area-header-text, #post-area-header #post-header-max-posts {
+  margin: 0;
 }
 #post-area-header #post-area-header-text {
-  margin: 0;
+  width: 75px;
+}
+#post-area-header #post-header-max-posts {
+  color: #b4b4b8;
+  margin-left: 30px;
+  width: 75px;
+  font-size: 16px;
 }
 
 #post-area-controls {
@@ -527,6 +632,9 @@ html, body {
   transform: translateX(-50%);
 }
 #post-area-controls #control-add-post {
+  width: 100px;
+}
+#post-area-controls #control-add-post-disabled {
   width: 100px;
 }
 
@@ -698,7 +806,7 @@ html, body {
   padding: 15px 0;
   background-color: #F4F6FF;
   box-shadow: 0 0 6px 0 rgba(32, 32, 36, 0.12);
-  transitioN: all 0.35s ease;
+  transition: all 0.35s ease;
 }
 .friend-node .friend-node-content {
   width: 80%;
@@ -808,37 +916,69 @@ html, body {
   align-items: center;
   gap: 30px;
 }
-#friends-area-header #friends-area-header-label {
-  flex-grow: 3;
-}
 #friends-area-header #friends-area-header-text {
   margin: 0;
 }
 #friends-area-header #friends-followers-area, #friends-area-header #friends-following-area {
-  flex-grow: 1;
+  position: relative;
+  width: 125px;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 #friends-area-header #friends-followers-area h3, #friends-area-header #friends-following-area h3 {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #4d4d4f;
-}
-#friends-area-header #friends-followers-area #friends-followers-label {
-  flex-grow: 2;
-}
-#friends-area-header #friends-followers-area #friends-followers-num {
-  flex-grow: 1;
-}
-#friends-area-header #friends-following-area #friends-following-label {
-  flex-grow: 2;
-}
-#friends-area-header #friends-following-area #friends-following-num {
-  flex-grow: 1;
 }
 #friends-area-header .tab-link {
   cursor: pointer;
+  text-decoration: none;
+  color: #b4b4b8;
+  overflow: hidden;
+  transition: all 0.35s ease;
+}
+#friends-area-header .tab-link::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: #4F8A8B;
+  transform: scaleX(0);
+  transform-origin: top left;
+  transition: transform 0.3s ease;
+}
+#friends-area-header .tab-link:hover::before {
+  transform: scaleX(1);
+}
+#friends-area-header .selected {
+  cursor: pointer;
+  text-decoration: none;
+  color: #4d4d4f;
+  overflow: hidden;
+  transition: all 0.35s ease;
+}
+#friends-area-header .selected::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: #4F8A8B;
+  transform: scaleX(1);
+  transform-origin: top left;
+  transition: transform 0.3s ease;
+}
+#friends-area-header .selected-num {
+  color: #4d4d4f;
+}
+#friends-area-header .unselected-num {
+  color: #b4b4b8;
 }
 
 #friends-area-controls {
@@ -858,7 +998,7 @@ html, body {
   gap: 30px;
 }
 
-#post-area-controls div, #friends-area-controls div {
+#post-area-controls #control-add-post {
   height: 40px;
   cursor: pointer;
   border-radius: 3px;
@@ -868,17 +1008,54 @@ html, body {
   background-color: #F4F6FF;
   text-align: center;
 }
-#post-area-controls div p, #friends-area-controls div p {
+#post-area-controls #control-add-post p {
   margin: 10px 0px 0px 0px;
   font-family: "EB Garamond", serif;
 }
-#post-area-controls div:hover, #friends-area-controls div:hover {
+#post-area-controls #control-add-post:hover {
   color: #F4F6FF;
   background-color: #07031A;
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
-#post-area-controls div:active, #friends-area-controls div:active {
+#post-area-controls #control-add-post:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+#post-area-controls #control-add-post-disabled {
+  height: 40px;
+  border-radius: 3px;
+  border: 1.5px solid #07031A;
+  box-shadow: none;
+  background-color: #DCDDE0;
+  text-align: center;
+}
+#post-area-controls #control-add-post-disabled p {
+  margin: 10px 0px 0px 0px;
+  font-family: "EB Garamond", serif;
+}
+
+#friends-area-controls #control-add-friend {
+  height: 40px;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1.5px solid #07031A;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: none;
+  background-color: #F4F6FF;
+  text-align: center;
+}
+#friends-area-controls #control-add-friend p {
+  margin: 10px 0px 0px 0px;
+  font-family: "EB Garamond", serif;
+}
+#friends-area-controls #control-add-friend:hover {
+  color: #F4F6FF;
+  background-color: #07031A;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+#friends-area-controls #control-add-friend:active {
   box-shadow: none;
   transform: translateY(0);
 }

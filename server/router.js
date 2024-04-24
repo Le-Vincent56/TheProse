@@ -16,9 +16,11 @@ const router = (app) => {
   app.get('/searchProfiles', mid.requiresLogin, controllers.Profile.getAllProfilesByUsername);
   app.get('/redirectProfile', mid.requiresLogin, controllers.Profile.redirectProfile);
 
-  app.get('/getFriendData', mid.requiresLogin, controllers.Profile.getFriendData);
+  app.post('/updatePremium', mid.requiresLogin, controllers.Profile.updatePremium);
 
+  app.get('/getFriendData', mid.requiresLogin, controllers.Profile.getFriendData);
   app.get('/getFriends', mid.requiresLogin, controllers.Profile.getFriends);
+  app.get('/getFollowers', mid.requiresLogin, controllers.Profile.getFollowers);
   app.post('/addFriend', mid.requiresLogin, controllers.Account.addFriend);
   app.post('/removeFriend', mid.requiresLogin, controllers.Account.removeFriend);
 

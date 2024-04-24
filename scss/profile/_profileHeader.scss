@@ -12,12 +12,66 @@
         rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
 }
 
-#profile-edit-display {
+#profile-control-display {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
     position: relative;
     padding: 10px 15px;
     left: 100%;
     transform: translateX(-100%);
-    width: 8%;
+    width: 330px;
+
+    #premium-btn-container {
+        box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+        
+        div {
+            width: 145px;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: none;
+            text-align: center;
+            border: 1.5px solid transparent;
+    
+            p {
+                font-size: 16px;
+                margin: 10px 0px 0px 0px;
+                font-family: palette.$main-font;
+            }
+        }
+    
+        div:hover {
+            transform: translateY(-2px);
+        }
+    
+        div:active {
+            box-shadow: none;
+            transform: translateY(0);
+        }
+
+        #profile-premium-button-active {
+            background-color: palette.$primary-color;
+        }
+
+        #profile-premium-button-active:hover {
+            color: palette.$background-color;
+            background-color: palette.$secondary-color;
+            border: 1.5px solid palette.$secondary-color;
+        }
+
+        #profile-premium-button-inactive {
+            background-color: palette.$secondary-color;
+            color: palette.$background-color;
+        }
+
+        #profile-premium-button-inactive:hover {
+            color: palette.$dark-color;
+            background-color: palette.$primary-color;
+            border: 1.5px solid palette.$primary-color;
+        }
+    }
 }
 
 #profile-edit-button {
@@ -25,14 +79,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 5px;
+    border-radius: 3px;
     background-color: palette.$secondary-color;
     font-family: palette.$main-font;
     box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     cursor: pointer;
-    border: none;
+    border: 1.5px solid transparent;
     height: 40px;
+    width: 145px;
 
     span {
         text-align: center;
@@ -40,7 +95,7 @@
         width: 100%;
         padding: 18px 9px;
         color: palette.$background-color;
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 200;
         z-index: 20;
         transition: all 0.3s ease-in-out;

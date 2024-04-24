@@ -2,15 +2,18 @@ const React = require('react');
 const profileHelper = require('../profileHelper.js');
 const profileUI = require('../profileUI.js');
 
-const PostFormControls = (props) => {
+const PostFormHeader = (props) => {
     return(
-        <div id="post-controls">
-            <div id="control-cancel-post">
-                <button id="cancel-post-button"
-                    onClick={(e) => props.cancelPost(e)}
+        <div id="post-header">
+            <div id='cancel-post-btn-container'>
+                <div id="cancel-post-btn"
+                        onClick={(e) => props.cancelPost(e)}
                 >
-                    CANCEL POST
-                </button>
+                    <p className='cancel-post-btn-text'>CANCEL POST</p>
+                </div>
+            </div>
+            <div id='post-header-label'>
+                <h1 id='post-header-text'>NEW POST</h1>
             </div>
         </div>
     );
@@ -193,7 +196,7 @@ const PostFormPosted = (props) => {
 }
 
 module.exports ={
-    PostFormControls,
+    PostFormHeader,
     PostFormCreate,
     PostFormPosted,
     PostFormEdit,

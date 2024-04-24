@@ -21,6 +21,67 @@
     background-color: palette.$background-color;
 }
 
+@mixin the-prose-button-div {
+    div {
+        width: 125px;
+        height: 50px;
+        cursor: pointer;
+        border-radius: 3px;
+        border: 1.5px solid palette.$dark-color;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow: none;
+        background-color: palette.$background-color;
+        text-align: center;
+
+        p {
+            font-family: palette.$main-font;
+        }
+    }
+
+    div:hover {
+        color: palette.$background-color;
+        background-color: palette.$dark-color;
+        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+        transform: translateY(-2px);
+    }
+
+    div:active {
+        box-shadow: none;
+        transform: translateY(0);
+    }
+}
+
+#post-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 25px;
+
+    #cancel-post-btn-container {
+        @include the-prose-button-div;
+
+        div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+
+            p {
+                margin: 0;
+            }
+        }
+    }
+
+    #post-header-label {
+        margin-left: 40px;
+
+        h1 {
+            font-size: 36px;
+            margin: 0;
+        }
+    }
+}
+
 .form-content {
     position: relative;
     display: flex;
@@ -153,41 +214,14 @@
 }
 
 .form-footer {
+    @include the-prose-button-div;
     display: flex;
     flex-direction: row;
     gap: 20px;
     justify-content: center;
 
-    div {
-        width: 125px;
-        height: 50px;
-        cursor: pointer;
-        border-radius: 3px;
-        border: 1.5px solid palette.$dark-color;
-        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-        box-shadow: none;
-        background-color: palette.$background-color;
-        text-align: center;
-
-        p {
-            font-family: palette.$main-font;
-        }
-    }
-
-    div:hover {
-        color: palette.$background-color;
-        background-color: palette.$dark-color;
-        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-        transform: translateY(-2px);
-    }
-
     .form-delete-btn:hover {
         background-color: palette.$error-color;
         border-color: palette.$error-color;
-    }
-
-    div:active {
-        box-shadow: none;
-        transform: translateY(0);
     }
 }

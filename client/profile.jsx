@@ -5,13 +5,14 @@ const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
 
 // Component imports
+const helper = require('./helper.js');
 const postFormComps = require('./components/postFormComps.js');
 const postAreaComps = require('./components/postAreaComps.js');
 const profileEditorComps = require('./components/profileEditorComps.js');
 const friendsAreaComps = require('./components/friendsAreaComps.js');
 
 // Set React elements
-const PostFormControls = postFormComps.PostFormControls;
+const PostFormControls = postFormComps.PostFormHeader;
 const PostFormEdit = postFormComps.PostFormEdit;
 const PostFormCreate = postFormComps.PostFormCreate;
 const PostFormPosted = postFormComps.PostFormPosted;
@@ -99,6 +100,31 @@ const startEditProfile = async (e) => {
     loadPageEditAccount(data.profile[0]);
 }
 
+const togglePremium = (e, premium, onPremiumChanged) => {
+    const newPremium = !premium;
+
+    helper.sendPost('/updatePremium', {premium: newPremium}, onPremiumChanged);
+    return false;
+}
+
+const PremiumButton = (props) => {
+    if(props.premium) {
+        return (
+            <div id='profile-premium-button-active'
+                onClick={(e) => togglePremium(e, props.premium, props.triggerReload)}>
+                    <p>Deactivate Premium</p>
+            </div>
+        )
+    } else {
+        return (
+            <div id='profile-premium-button-inactive'
+                onClick={(e) => togglePremium(e, props.premium, props.triggerReload)}>
+                    <p>Activate Premium</p>
+            </div>
+        )
+    }
+}
+
 const ProfileHeader = (props) => {
     useEffect(() => {
         const loadProfileFromServer = async () => {
@@ -134,7 +160,11 @@ const ProfileHeader = (props) => {
         if(props.profile.isCurrentUser) {
             return (
                 <div id='profile-header'>
-                    <div id='profile-edit-display'>
+                    <div id='profile-control-display'>
+                        <div id='premium-btn-container'>
+                            <PremiumButton premium={props.profile.premium} 
+                            triggerReload={props.triggerReload}/>
+                        </div>
                         <div id='profile-edit-button'
                         onClick={(e) => startEditProfile(e)}>
                             <span id='profile-edit-text'>Edit Profile</span>
@@ -212,7 +242,7 @@ const LoadPage = (props) => {
             return(
                 <div id="profile">
                     <ProfileHeader profile={profile} setProfile={setProfile}
-                    reloadHeader={reloadHeader}/>
+                    reloadHeader={reloadHeader} triggerReload={() => setReloadHeader(!reloadHeader)}/>
                     <div id="profile-body">
                         <PostArea profile={profile}
                             startPost={startPost} startEdit={startEdit} reloadPosts={reloadPosts}/>

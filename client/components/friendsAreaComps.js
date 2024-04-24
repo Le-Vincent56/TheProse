@@ -48,6 +48,43 @@ const goToProfile = async (e, username) => {
     return false;
 }
 
+const changeFriendsTab = async (e, setTab, tabToSet, onTabChange) => {
+    // Change tabs
+    setTab(tabToSet);
+    onTabChange();
+
+    const setStyleClasses = (self, allyNum, otherLabel, otherNum) => {
+        self.classList.add('selected');
+        self.classList.remove('tab-link');
+
+        allyNum.classList.add('selected-num');
+        allyNum.classList.remove('unselected-num');
+
+        otherLabel.classList.add('tab-link');
+        otherLabel.classList.remove('selected');
+
+        otherNum.classList.add('unselected-num');
+        otherNum.classList.remove('selected-num');
+    }
+
+    // Change classes
+    if(tabToSet) {
+        // Set following to selected
+        const allyNum = document.querySelector('#friends-following-num');
+        const otherLabel = document.querySelector('#friends-followers-label');
+        const otherNum = document.querySelector('#friends-followers-num');
+        setStyleClasses(e.target, allyNum, otherLabel, otherNum);
+    } else {
+        // Set followers to selected
+        const allyNum = document.querySelector('#friends-followers-num');
+        const otherLabel = document.querySelector('#friends-following-label');
+        const otherNum = document.querySelector('#friends-following-num');
+        setStyleClasses(e.target, allyNum, otherLabel, otherNum);
+    }
+
+    return false;
+}
+
 const decideNodeAction = async (e, username, userID, onAccountRemoved) => {
     // Choose which action to do depending on the element clicked
     if(e.target.className === 'remove-friend-container' ||
@@ -94,13 +131,19 @@ const FriendsAreaHeader = (props) => {
             </div>
 
             <div id='friends-following-area'>
-                <h3 id='friends-following-label' class='tab-link'>FOLLOWING</h3>
-                <h3 id='friends-following-num'>0</h3>
+                <h3 id='friends-following-label' class='tab-link selected'
+                onClick={(e) => changeFriendsTab(e, props.setTab, true, props.triggerReload)}>
+                    FOLLOWING
+                </h3>
+                <h3 class='selected-num'id='friends-following-num'>0</h3>
             </div>
 
             <div id='friends-followers-area'>
-                <h3 id='friends-followers-label' class='tab-link'>FOLLOWERS</h3>
-                <h3 id='friends-followers-num'>0</h3>
+                <h3 id='friends-followers-label' class='tab-link'
+                onClick={(e) => changeFriendsTab(e, props.setTab, false, props.triggerReload)}>
+                    FOLLOWERS
+                </h3>
+                <h3 class='unselected-num' id='friends-followers-num'>0</h3>
             </div>
         </div>
     )
@@ -197,6 +240,7 @@ const FriendsModal = (props) => {
                     variants={backdrop}
                     initial="hidden"
                     animate="visible"
+                    exit="hidden"
                 >
                     <motion.div className='friends-modal'>
                         <div className='friends-modal-header'>
@@ -223,15 +267,19 @@ const FriendsModal = (props) => {
 
 const FriendsList = (props) => {
     const [friends, setFriends] = useState(props.friends);
+    const [followers, setFollowers] = useState(props.followers);
 
     useEffect(() => {
         const loadFriendDataFromServer = async () => {
             // Load in the user's friends
-            const username = document.querySelector('#content').className;
+            const username = props.profile.username;
             const response = await fetch(`/getFriends?user=${username}`);
             const data = await response.json();
+            
+            // Prevent early loading
+            if(data.profile.length === 0) return;
 
-            // Store as a local friend ID to be used later in the function
+            // Store as a local friend ID array to be used later in the function
             const localFriendIDs = data.profile[0].friends;
 
             // Create and fill the friends array with friend profile data
@@ -245,50 +293,117 @@ const FriendsList = (props) => {
             // Set friends array
             setFriends(friendsArray);
         }
+
+        const loadFollowerDataFromServer = async () => {
+            // Load in the user's followers
+            const username = props.profile.username;
+            const response = await fetch(`/getFollowers?user=${username}`);
+            const data = await response.json();
+
+            // Prevent early loading
+            if(data.profile.length === 0) return;
+
+            // Store as a local follower ID array to be used later in the function
+            const localFollowerIDs = data.profile[0].followers;
+
+            // Create and fill the friends array with friend profile data
+            let followersArray = [];
+            for(const followerID of localFollowerIDs) {
+                const response = await fetch(`/getProfile?id=${followerID}`);
+                const data = await response.json();
+                followersArray.push(data.profile[0]);
+            }
+
+            // Set followers array
+            setFollowers(followersArray);
+        }
+
+        // Load friend and follower data
         loadFriendDataFromServer();
-    }, [props.reloadFriends]);
+        loadFollowerDataFromServer();
+    }, [props.profile, props.reloadFriends]);
 
-    if(friends.length === 0) {
-        return (
-            <div className="friends-list">
-                <h3 className="empty-friends">No Friends Yet!</h3>
-            </div>
-        );
-    }
+    let friendNodes;
+    if(props.currentTab) {
+        if(friends.length === 0) {
+            return (
+                <div className="friends-list">
+                    <h3 className="empty-friends">No Friends Yet!</h3>
+                </div>
+            );
+        }
 
-    // Create a node for each post
-    const friendNodes = friends.map(friend => {
-        if(props.profile.isCurrentUser) {
-            return(
-                <div id={friend._id} className="friend-node"
-                onClick={(e) => decideNodeAction(e, friend.username, 
-                                    friend._id, props.triggerReload)}>
-                    <div id={friend._id} class="friend-node-content">
-                        <div id={friend._id} class="friend-node-details">
-                            <h2 id={friend._id} class="friend-username">{friend.username}</h2>
-                        </div>
-                        <div id={friend._id} className='remove-friend-container'>
-                            <div id={friend._id} className="remove-friend-btn">
-                                <p id={friend._id} className="remove-friend-btn-text">REMOVE</p>
+        // Create a node for each friend
+        friendNodes = friends.map(friend => {
+            if(props.profile.isCurrentUser) {
+                return(
+                    <div id={friend._id} className="friend-node"
+                    onClick={(e) => decideNodeAction(e, friend.username, 
+                                        friend._id, props.triggerReload)}>
+                        <div id={friend._id} class="friend-node-content">
+                            <div id={friend._id} class="friend-node-details">
+                                <h2 id={friend._id} class="friend-username">{friend.username}</h2>
+                            </div>
+                            <div id={friend._id} className='remove-friend-container'>
+                                <div id={friend._id} className="remove-friend-btn">
+                                    <p id={friend._id} className="remove-friend-btn-text">REMOVE</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            );
-        } else {
-            return(
-                <div id={friend._id} className="friend-node"
-                onClick={(e) => decideNodeAction(e, friend.username, 
-                                    friend._id, props.triggerReload)}>
-                    <div id={friend._id} class="friend-node-content">
-                        <div id={friend._id} class="friend-node-details">
-                            <h2 id={friend._id} class="friend-username">{friend.username}</h2>
+                );
+            } else {
+                return(
+                    <div id={friend._id} className="friend-node"
+                    onClick={(e) => decideNodeAction(e, friend.username, 
+                                        friend._id, props.triggerReload)}>
+                        <div id={friend._id} class="friend-node-content">
+                            <div id={friend._id} class="friend-node-details">
+                                <h2 id={friend._id} class="friend-username">{friend.username}</h2>
+                            </div>
                         </div>
                     </div>
+                )
+            }
+        });
+    } else {
+        if(followers.length === 0) {
+            return (
+                <div className="friends-list">
+                    <h3 className="empty-friends">No Followers Yet!</h3>
                 </div>
-            )
+            );
         }
-    });
+
+        // Create a node for each follower
+        friendNodes = followers.map(friend => {
+            if(props.profile.isCurrentUser) {
+                return(
+                    <div id={friend._id} className="friend-node"
+                    onClick={(e) => decideNodeAction(e, friend.username, 
+                                        friend._id, props.triggerReload)}>
+                        <div id={friend._id} class="friend-node-content">
+                            <div id={friend._id} class="friend-node-details">
+                                <h2 id={friend._id} class="friend-username">{friend.username}</h2>
+                            </div>
+                        </div>
+                    </div>
+                );
+            } else {
+                return(
+                    <div id={friend._id} className="friend-node"
+                    onClick={(e) => decideNodeAction(e, friend.username, 
+                                        friend._id, props.triggerReload)}>
+                        <div id={friend._id} class="friend-node-content">
+                            <div id={friend._id} class="friend-node-details">
+                                <h2 id={friend._id} class="friend-username">{friend.username}</h2>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        });
+    }
 
     return(
         <div className="friends-list">
@@ -299,6 +414,7 @@ const FriendsList = (props) => {
 
 const FriendsArea = (props) => {
     const [profile, setProfile] = useState(props.profile);
+    const [currentTab, setTab] = useState(true);
 
     useEffect(() => {
         setProfile(props.profile);
@@ -309,11 +425,15 @@ const FriendsArea = (props) => {
             <div id='friends-area'>
                 <FriendsModal searchedFriends={[]} showModal={props.showModal}
                     setShowModal={props.setShowModal} triggerReload={props.triggerReload}/>
-                <FriendsAreaHeader profile={profile}
-                friendData={[]} reloadFriends={props.reloadFriends}/>
+                <FriendsAreaHeader profile={profile} 
+                setTab={setTab} currentTab={currentTab}
+                friendData={[]} reloadFriends={props.reloadFriends}
+                triggerReload={props.triggerReload}/>
                 <FriendsAreaControls setShowModal={props.setShowModal}/>
                 <FriendsList profile={props.profile}
-                    friends={[]} reloadFriends={props.reloadFriends} 
+                    currentTab={currentTab}
+                    followers={[]} friends={[]}
+                    reloadFriends={props.reloadFriends} 
                     triggerReload={props.triggerReload}/>
             </div>
         )
@@ -321,9 +441,13 @@ const FriendsArea = (props) => {
         return (
             <div id='friends-area'>
                 <FriendsAreaHeader profile={profile}
-                friendData={[]} reloadFriends={props.reloadFriends}/>
+                setTab={setTab} currentTab={currentTab}
+                friendData={[]} reloadFriends={props.reloadFriends}
+                triggerReload={props.triggerReload}/>
                 <FriendsList profile={props.profile}
-                    friends={[]} reloadFriends={props.reloadFriends} 
+                    currentTab={currentTab}
+                    followers={[]} friends={[]}
+                    reloadFriends={props.reloadFriends} 
                     triggerReload={props.triggerReload}/>
             </div>
         )
