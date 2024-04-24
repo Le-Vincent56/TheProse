@@ -151,12 +151,31 @@ const addFriend = async (req, res) => {
   };
 
   try {
+    // Query for the account to be following
+    const accountQuery = { _id: friendData.accountID };
+    const friendAccount = await Account.find(accountQuery)
+                                       .select('followers')
+                                       .lean()
+                                       .exec();
+
+    // Add the user's id to the followers list
+    const accountFollowers = friendAccount[0].followers;
+    accountFollowers.push(req.session.account._id);
+
+    // Update the followers for the friend's account
+    const updatedFriendAccount = await Account.findOneAndUpdate(
+      accountQuery,
+      {
+        followers: accountFollowers,
+      }
+    );
+
     // Query for the current account
     const profileQuery = { username: req.session.account.username };
     const currentAccount = await Account.find(profileQuery)
-      .select('friends')
-      .lean()
-      .exec();
+                                        .select('friends')
+                                        .lean()
+                                        .exec();
 
     // Update the current list of friends
     const currentFriends = currentAccount[0].friends;
@@ -170,7 +189,14 @@ const addFriend = async (req, res) => {
       },
     );
 
-    return res.json({ updatedAccount, message: 'Added friend!' });
+    // Return json
+    return res.json(
+      { 
+        updatedFriendAccount, 
+        updatedAccount,
+        message: 'Added friend!' 
+      }
+    );
   } catch (err) {
     // Log any errors and return a status code
     console.log(err);
@@ -185,6 +211,25 @@ const removeFriend = async (req, res) => {
   };
 
   try {
+    // Query for the account to be following
+    const accountQuery = { _id: friendData.accountID };
+    const friendAccount = await Account.find(accountQuery)
+                                       .select('followers')
+                                       .lean()
+                                       .exec();
+
+    // Remove the current id from the followers list
+    const accountFollowers = friendAccount[0].followers;
+    const updatedFollowersArray = accountFollowers.filter(
+      (follower) => !follower.equals(req.session.account._id),
+    );
+
+    // Update the followers for the friend's account
+    const updatedFriendAccount = await Account.findOneAndUpdate(
+      accountQuery,
+      { followers: updatedFollowersArray }
+    );
+
     // Query for the current account
     const profileQuery = { username: req.session.account.username };
     const currentAccount = await Account.find(profileQuery)
@@ -203,10 +248,16 @@ const removeFriend = async (req, res) => {
     // Update the account
     const updatedAccount = await Account.findOneAndUpdate(
       profileQuery,
-      { friends: updatedFriendsArray },
+      { friends: updatedFriendsArray }
     );
 
-    return res.json({ updatedAccount, message: 'Removed friend!' });
+    return res.json(
+      { 
+        updatedFriendAccount, 
+        updatedAccount, 
+        message: 'Removed friend!' 
+      }
+    );
   } catch (err) {
     // Log any errors and return a status code
     console.log(err);

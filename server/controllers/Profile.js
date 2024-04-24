@@ -150,6 +150,25 @@ const getFriends = async (req, res) => {
   }
 };
 
+const getFriendData = async (req, res) => {
+  const parsedURL = url.parse(req.url);
+  const params = query.parse(parsedURL.query);
+
+  try {
+    const profileQuery = { username: params.user };
+    const docs = await Account.find(profileQuery)
+                              .select('friends followers')
+                              .lean()
+                              .exec();
+
+    return res.json({friends: docs});
+  } catch (err) {
+    // Log any errors
+    console.log(err);
+    return res.status(500).json({ error: 'Error getting followers' });
+  }
+}
+
 module.exports = {
   profilePage,
   redirectProfile,
@@ -159,4 +178,5 @@ module.exports = {
   editProfile,
   getAllProfilesByUsername,
   getFriends,
+  getFriendData,
 };

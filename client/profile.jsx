@@ -108,7 +108,7 @@ const ProfileHeader = (props) => {
             props.setProfile(data.profile[0]);
         };
         loadProfileFromServer();
-    }, [props.profile]);
+    }, [props.reloadHeader]);
 
     if(props.profile === undefined) {
         return (
@@ -174,6 +174,7 @@ const ProfileHeader = (props) => {
 }
 
 const LoadPage = (props) => {
+    const [reloadHeader, setReloadHeader] = useState(false);
     const [reloadPosts, setReloadPosts] = useState(false);
     const [reloadFriends, setReloadFriends] = useState(false);
     const [showFriendsModal, setFriendsModal] = useState(false);
@@ -210,7 +211,8 @@ const LoadPage = (props) => {
         case 0:
             return(
                 <div id="profile">
-                    <ProfileHeader profile={profile} setProfile={setProfile}/>
+                    <ProfileHeader profile={profile} setProfile={setProfile}
+                    reloadHeader={reloadHeader}/>
                     <div id="profile-body">
                         <PostArea profile={profile}
                             startPost={startPost} startEdit={startEdit} reloadPosts={reloadPosts}/>

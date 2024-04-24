@@ -61,6 +61,51 @@ const decideNodeAction = async (e, username, userID, onAccountRemoved) => {
     return false;
 }
 
+const FriendsAreaHeader = (props) => {
+    useEffect(() => {
+        const getFriendData = async () => {
+            const response = await fetch(
+                `/getFriendData?user=${props.profile.username}`
+            );
+            const data = await response.json();
+
+            // Return in case of running before profile is retrieved
+            if(data.friends.length === 0) return;
+
+            // Set follower data
+            const followers = document.querySelector(
+                '#friends-followers-num'
+            );
+            followers.innerHTML = data.friends[0].followers.length;
+
+            // Set following data
+            const following = document.querySelector(
+                '#friends-following-num'
+            );
+            following.innerHTML = data.friends[0].friends.length;
+        }
+        getFriendData();
+    }, [props.profile, props.reloadFriends]);
+
+    return (
+        <div id='friends-area-header'>
+            <div id='friends-area-header-label'>
+                <h1 id='friends-area-header-text'>FRIENDS</h1>
+            </div>
+
+            <div id='friends-following-area'>
+                <h3 id='friends-following-label' class='tab-link'>FOLLOWING</h3>
+                <h3 id='friends-following-num'>0</h3>
+            </div>
+
+            <div id='friends-followers-area'>
+                <h3 id='friends-followers-label' class='tab-link'>FOLLOWERS</h3>
+                <h3 id='friends-followers-num'>0</h3>
+            </div>
+        </div>
+    )
+}
+
 const FriendsAreaControls = (props) => {
     return (
         <div id='friends-area-controls'>
@@ -253,14 +298,19 @@ const FriendsList = (props) => {
 }
 
 const FriendsArea = (props) => {
-    if(props.profile.isCurrentUser) {
+    const [profile, setProfile] = useState(props.profile);
+
+    useEffect(() => {
+        setProfile(props.profile);
+    }, [props.profile]);
+
+    if(profile.isCurrentUser) {
         return (
             <div id='friends-area'>
                 <FriendsModal searchedFriends={[]} showModal={props.showModal}
                     setShowModal={props.setShowModal} triggerReload={props.triggerReload}/>
-                <div id='friends-area-header'>
-                    <h1 id='friends-area-header-text'>FRIENDS</h1>
-                </div>
+                <FriendsAreaHeader profile={profile}
+                friendData={[]} reloadFriends={props.reloadFriends}/>
                 <FriendsAreaControls setShowModal={props.setShowModal}/>
                 <FriendsList profile={props.profile}
                     friends={[]} reloadFriends={props.reloadFriends} 
@@ -270,9 +320,8 @@ const FriendsArea = (props) => {
     } else {
         return (
             <div id='friends-area'>
-                <div id='friends-area-header'>
-                    <h1 id='friends-area-header-text'>FRIENDS</h1>
-                </div>
+                <FriendsAreaHeader profile={profile}
+                friendData={[]} reloadFriends={props.reloadFriends}/>
                 <FriendsList profile={props.profile}
                     friends={[]} reloadFriends={props.reloadFriends} 
                     triggerReload={props.triggerReload}/>

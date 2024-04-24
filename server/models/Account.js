@@ -24,6 +24,10 @@ const AccountSchema = new mongoose.Schema({
     type: [mongoose.Schema.ObjectId],
     required: false,
   },
+  followers: {
+    type: [mongoose.Schema.ObjectId],
+    required: false,
+  },
   bio: {
     type: String,
     required: false,
@@ -40,6 +44,7 @@ AccountSchema.statics.toAPI = (doc) => ({
   username: doc.username,
   bio: doc.bio,
   friends: doc.friends,
+  followers: doc.followers,
   createdDate: doc.createdDate,
   _id: doc._id,
 });

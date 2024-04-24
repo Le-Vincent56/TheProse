@@ -1,3 +1,4 @@
+@use '../palette';
 @use 'friendsModal';
 @use 'friendsList';
 
@@ -25,9 +26,54 @@
 #friends-area-header {
     @include centered;
     width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+
+    #friends-area-header-label {
+        flex-grow: 3;
+    }
 
     #friends-area-header-text {
         margin: 0;
+    }
+
+    #friends-followers-area, #friends-following-area {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: row;
+
+        h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: palette.$dark-color-lighter;
+        }
+    }
+
+    #friends-followers-area {
+        #friends-followers-label {
+            flex-grow: 2;
+        }
+
+        #friends-followers-num {
+            flex-grow: 1;
+        }
+    }
+
+    #friends-following-area {
+        #friends-following-label {
+            flex-grow: 2;
+        }
+
+        #friends-following-num {
+            flex-grow: 1;
+        }
+    }
+
+    .tab-link {
+        cursor: pointer;
     }
 }
 
