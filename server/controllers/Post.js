@@ -141,21 +141,15 @@ const getPosts = async (req, res) => {
     const docs = await Post.find(postQuery).select('title body genre author private id').lean().exec();
 
     // Check if the account is the user's
-    if(postQuery.owner.toString() === req.session.account._id.toString()) {
+    if (postQuery.owner.toString() === req.session.account._id.toString()) {
       // If so, return all posts
-      return res.json({posts: docs})
-    } else {
-      // Otherwise, filter public posts
-      let shownPosts = [];
-      for(const post of docs) {
-        if(!post.private) {
-          shownPosts.push(post);
-        }
-      }
-
-      // Only return public posts
-      return res.json({posts: shownPosts});
+      return res.json({ posts: docs });
     }
+    // Otherwise, filter public posts
+    const shownPosts = docs.filter((post) => !post.private);
+
+    // Only return public posts
+    return res.json({ posts: shownPosts });
   } catch (err) {
     // Log any errors and return a status code
     console.log(err);
@@ -183,17 +177,17 @@ const getPost = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     // Create query
-    const postQuery = { 
-      owner: req.session.account._id, 
-      id: req.body.postID
+    const postQuery = {
+      owner: req.session.account._id,
+      id: req.body.postID,
     };
 
     // Delete the post
     const docs = await Post.deleteOne(postQuery).lean().exec();
 
     return res.json({
-      deletedPost: docs, 
-      redirect: `/profile?user=${req.session.account.username}`
+      deletedPost: docs,
+      redirect: `/profile?user=${req.session.account.username}`,
     });
   } catch (err) {
     // Log any errors and return a status code

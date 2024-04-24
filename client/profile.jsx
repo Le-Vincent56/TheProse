@@ -100,19 +100,17 @@ const startEditProfile = async (e) => {
 }
 
 const ProfileHeader = (props) => {
-    const [profile, setProfile] = useState(props.profile);
-
     useEffect(() => {
         const loadProfileFromServer = async () => {
             const username = document.querySelector('#content').className;
             const response = await fetch(`/getProfile?user=${username}`);
             const data = await response.json();
-            setProfile(data.profile[0]);
+            props.setProfile(data.profile[0]);
         };
         loadProfileFromServer();
-    }, [profile]);
+    }, [props.profile]);
 
-    if(profile === undefined) {
+    if(props.profile === undefined) {
         return (
             <div id='profile-header'>
                 <div id='profile-username-display'>
@@ -121,19 +119,19 @@ const ProfileHeader = (props) => {
             </div>
         );
     } else{
-        let parsedDate = new Date(profile.createdDate);
+        let parsedDate = new Date(props.profile.createdDate);
         let convertedMonth = parsedDate.toLocaleString('default', {month: 'long'});
         let dateString = `${convertedMonth} ${parsedDate.getDate()}, ${parsedDate.getFullYear()}`
 
         let bio = '';
-        if(profile.bio === '') {
+        if(props.profile.bio === '') {
             bio = "[No Biography]"
         } else {
-            bio = profile.bio;
+            bio = props.profile.bio;
         }
 
         // Return different UI for if the user is looking at their own vs. another profile
-        if(profile.isCurrentUser) {
+        if(props.profile.isCurrentUser) {
             return (
                 <div id='profile-header'>
                     <div id='profile-edit-display'>
@@ -144,7 +142,7 @@ const ProfileHeader = (props) => {
                     </div>
                     <div id='profile-account-details'>
                         <div id='profile-username-display'>
-                            <h1 id='profile-username-text'>{profile.username}</h1>
+                            <h1 id='profile-username-text'>{props.profile.username}</h1>
                         </div>
                         <div id='profile-bio-display'>
                             <p id='profile-bio-text'>{bio}</p>
@@ -160,7 +158,7 @@ const ProfileHeader = (props) => {
                 <div id='profile-header'>
                     <div id='profile-account-details'>
                         <div id='profile-username-display'>
-                            <h1 id='profile-username-text'>{profile.username}</h1>
+                            <h1 id='profile-username-text'>{props.profile.username}</h1>
                         </div>
                         <div id='profile-bio-display'>
                             <p id='profile-bio-text'>{bio}</p>
@@ -179,6 +177,7 @@ const LoadPage = (props) => {
     const [reloadPosts, setReloadPosts] = useState(false);
     const [reloadFriends, setReloadFriends] = useState(false);
     const [showFriendsModal, setFriendsModal] = useState(false);
+    const [profile, setProfile] = useState({});
 
     useEffect(() => {
         // If editing a post, add the current data
@@ -211,10 +210,12 @@ const LoadPage = (props) => {
         case 0:
             return(
                 <div id="profile">
-                    <ProfileHeader/>
+                    <ProfileHeader profile={profile} setProfile={setProfile}/>
                     <div id="profile-body">
-                        <PostArea startPost={startPost} startEdit={startEdit} reloadPosts={reloadPosts}/>
-                        <FriendsArea showModal={showFriendsModal}
+                        <PostArea profile={profile}
+                            startPost={startPost} startEdit={startEdit} reloadPosts={reloadPosts}/>
+                        <FriendsArea profile={profile}
+                            showModal={showFriendsModal}
                             setShowModal={setFriendsModal} reloadFriends={reloadFriends}
                             triggerReload={() => setReloadFriends(!reloadFriends)}/>
                     </div>

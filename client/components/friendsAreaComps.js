@@ -213,22 +213,36 @@ const FriendsList = (props) => {
 
     // Create a node for each post
     const friendNodes = friends.map(friend => {
-        return(
-            <div id={friend._id} className="friend-node"
-            onClick={(e) => decideNodeAction(e, friend.username, 
-                                friend._id, props.triggerReload)}>
-                <div id={friend._id} class="friend-node-content">
-                    <div id={friend._id} class="friend-node-details">
-                        <h2 id={friend._id} class="friend-username">{friend.username}</h2>
-                    </div>
-                    <div id={friend._id} className='remove-friend-container'>
-                        <div id={friend._id} className="remove-friend-btn">
-                            <p id={friend._id} className="remove-friend-btn-text">REMOVE</p>
+        if(props.profile.isCurrentUser) {
+            return(
+                <div id={friend._id} className="friend-node"
+                onClick={(e) => decideNodeAction(e, friend.username, 
+                                    friend._id, props.triggerReload)}>
+                    <div id={friend._id} class="friend-node-content">
+                        <div id={friend._id} class="friend-node-details">
+                            <h2 id={friend._id} class="friend-username">{friend.username}</h2>
+                        </div>
+                        <div id={friend._id} className='remove-friend-container'>
+                            <div id={friend._id} className="remove-friend-btn">
+                                <p id={friend._id} className="remove-friend-btn-text">REMOVE</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        )
+            );
+        } else {
+            return(
+                <div id={friend._id} className="friend-node"
+                onClick={(e) => decideNodeAction(e, friend.username, 
+                                    friend._id, props.triggerReload)}>
+                    <div id={friend._id} class="friend-node-content">
+                        <div id={friend._id} class="friend-node-details">
+                            <h2 id={friend._id} class="friend-username">{friend.username}</h2>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
     });
 
     return(
@@ -239,18 +253,32 @@ const FriendsList = (props) => {
 }
 
 const FriendsArea = (props) => {
-    return (
-        <div id='friends-area'>
-            <FriendsModal searchedFriends={[]} showModal={props.showModal}
-                setShowModal={props.setShowModal} triggerReload={props.triggerReload}/>
-            <div id='friends-area-header'>
-                <h1 id='friends-area-header-text'>FRIENDS</h1>
+    if(props.profile.isCurrentUser) {
+        return (
+            <div id='friends-area'>
+                <FriendsModal searchedFriends={[]} showModal={props.showModal}
+                    setShowModal={props.setShowModal} triggerReload={props.triggerReload}/>
+                <div id='friends-area-header'>
+                    <h1 id='friends-area-header-text'>FRIENDS</h1>
+                </div>
+                <FriendsAreaControls setShowModal={props.setShowModal}/>
+                <FriendsList profile={props.profile}
+                    friends={[]} reloadFriends={props.reloadFriends} 
+                    triggerReload={props.triggerReload}/>
             </div>
-            <FriendsAreaControls setShowModal={props.setShowModal}/>
-            <FriendsList friends={[]} reloadFriends={props.reloadFriends} 
-                triggerReload={props.triggerReload}/>
-        </div>
-    )
+        )
+    } else {
+        return (
+            <div id='friends-area'>
+                <div id='friends-area-header'>
+                    <h1 id='friends-area-header-text'>FRIENDS</h1>
+                </div>
+                <FriendsList profile={props.profile}
+                    friends={[]} reloadFriends={props.reloadFriends} 
+                    triggerReload={props.triggerReload}/>
+            </div>
+        )
+    }
 }
 
 module.exports = {

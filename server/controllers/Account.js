@@ -147,75 +147,72 @@ const resetPass = async (req, res) => {
 const addFriend = async (req, res) => {
   // Retrieve data
   const friendData = {
-    accountID: req.body.accountID
+    accountID: req.body.accountID,
   };
 
   try {
     // Query for the current account
     const profileQuery = { username: req.session.account.username };
     const currentAccount = await Account.find(profileQuery)
-                                  .select('friends')
-                                  .lean()
-                                  .exec();
+      .select('friends')
+      .lean()
+      .exec();
 
     // Update the current list of friends
-    let currentFriends = currentAccount[0].friends;
+    const currentFriends = currentAccount[0].friends;
     currentFriends.push(friendData.accountID);
 
     // Update the current account
     const updatedAccount = await Account.findOneAndUpdate(
       profileQuery,
       {
-        friends: currentFriends
-      }
+        friends: currentFriends,
+      },
     );
 
-    return res.json({updatedAccount, message: 'Added friend!'});
+    return res.json({ updatedAccount, message: 'Added friend!' });
   } catch (err) {
     // Log any errors and return a status code
     console.log(err);
     return res.status(500).json({ error: 'Error adding friend!' });
   }
-}
+};
 
 const removeFriend = async (req, res) => {
   // Retrieve data
   const friendData = {
-    accountID: req.body.accountID
+    accountID: req.body.accountID,
   };
 
   try {
     // Query for the current account
     const profileQuery = { username: req.session.account.username };
     const currentAccount = await Account.find(profileQuery)
-                                  .select('friends')
-                                  .lean()
-                                  .exec();
+      .select('friends')
+      .lean()
+      .exec();
 
     // Gather the current list of friends
-    let currentFriends = currentAccount[0].friends;
+    const currentFriends = currentAccount[0].friends;
 
     // Update the list of friends (remove the posted ID)
-    let updatedFriendsArray = [];
-    for(const friend of currentFriends) {
-      if(!friend.equals(friendData.accountID)) {
-        updatedFriendsArray.push(friend);
-      }
-    }
+    const updatedFriendsArray = currentFriends.filter(
+      (friend) => !friend.equals(friendData.accountID),
+    );
 
     // Update the account
     const updatedAccount = await Account.findOneAndUpdate(
       profileQuery,
-      { friends: updatedFriendsArray }
+      { friends: updatedFriendsArray },
     );
 
-    return res.json({updatedAccount, message: 'Removed friend!'});
+    return res.json({ updatedAccount, message: 'Removed friend!' });
   } catch (err) {
     // Log any errors and return a status code
     console.log(err);
     return res.status(500).json({ error: 'Error adding friend!' });
   }
-}
+};
 
 // Exports
 module.exports = {

@@ -15,11 +15,11 @@ const router = (app) => {
   app.post('/editProfile', mid.requiresLogin, controllers.Profile.editProfile);
   app.get('/searchProfiles', mid.requiresLogin, controllers.Profile.getAllProfilesByUsername);
   app.get('/redirectProfile', mid.requiresLogin, controllers.Profile.redirectProfile);
-  
+
   app.get('/getFriends', mid.requiresLogin, controllers.Profile.getFriends);
   app.post('/addFriend', mid.requiresLogin, controllers.Account.addFriend);
   app.post('/removeFriend', mid.requiresLogin, controllers.Account.removeFriend);
-  
+
   app.get('/getPost', mid.requiresLogin, controllers.Post.getPost);
   app.get('/getPosts', mid.requiresLogin, controllers.Post.getPosts);
   app.post('/saveDraft', mid.requiresLogin, controllers.Post.makePost);
