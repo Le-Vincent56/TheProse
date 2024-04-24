@@ -1,6 +1,6 @@
-@use 'palette';
-@use 'postArea';
-@use 'friendsArea';
+@use '../palette';
+@use '../post/postArea';
+@use '../friends/friendsArea';
 
 @mixin prose-button-div {
     div {

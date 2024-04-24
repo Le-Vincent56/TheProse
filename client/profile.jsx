@@ -185,7 +185,7 @@ const LoadPage = (props) => {
         if(currentState === 2 || currentState === 3) {
             // Add title
             const title = document.querySelector('#title-input');
-            title.value = value = props.postObj.title;
+            title.value = props.postObj.title;
 
             // Add author
             const author = document.querySelector('#author-input');

@@ -111,14 +111,15 @@ const PostFormEdit = (props) => {
 
                 <div class="form-footer">
                     <div class="form-save-btn"
-                        onClick={(e) => {profileHelper.saveEdit(e, props.postData.id, false)}}>
+                        onClick={(e) => profileHelper.saveEdit(e, props.postData.id, false)}>
                         <p class="form-save-text">SAVE DRAFT</p>
                     </div>
                     <div class="form-post-btn"
-                        onClick={(e) => {profileHelper.postEdit(e, props.postData.id)}}>
+                        onClick={(e) => profileHelper.postEdit(e, props.postData.id)}>
                         <p class="form-post-text">POST</p>
                     </div>
-                    <div class="form-delete-btn">
+                    <div class="form-delete-btn"
+                        onClick={(e) => profileHelper.deletePost(e, props.postData.id)}>
                         <p class="form-delete-text">DELETE</p>
                     </div>
                 </div>
@@ -177,7 +178,8 @@ const PostFormPosted = (props) => {
                         onClick={(e) => {profileHelper.saveEdit(e, props.postData.id, true)}}>
                         <p class="form-save-text">SAVE DRAFT</p>
                     </div>
-                    <div class="form-delete-btn">
+                    <div class="form-delete-btn"
+                        onClick={(e) => profileHelper.deletePost(e, props.postData.id)}>
                         <p class="form-delete-text">DELETE</p>
                     </div>
                 </div>

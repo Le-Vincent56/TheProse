@@ -117,6 +117,14 @@ const saveProfileChanges = (e, accountID) => {
     return false;
 }
 
+const deletePost = (e, postID) => {
+    // Prevent default events
+    e.preventDefault();
+
+    helper.sendPost('/deletePost', {postID});
+    return false;
+}
+
 module.exports = {
     collectData,
     postWork,
@@ -124,4 +132,5 @@ module.exports = {
     saveDraft,
     saveEdit,
     saveProfileChanges,
+    deletePost,
 }

@@ -1,5 +1,5 @@
 @use 'theprose';
-@use 'newpost';
-@use 'profileHeader';
-@use 'profileBody';
-@use 'editProfile'
+@use './post/newpost';
+@use './profile/profileHeader';
+@use './profile/profileBody';
+@use './profile/editProfile';
