@@ -2,6 +2,20 @@ const React = require('react');
 const profileHelper = require('../profileHelper.js');
 const helper = require('../helper.js');
 
+const trackCharacters = (e, maximum) => {
+    // Get the current value
+    const currentString = e.target.value;
+    const length = currentString.length;
+
+    // Stop after hitting the maximum character count
+    if(length > maximum) {
+        e.target.value = currentString.substring(0, maximum);
+    }
+
+    // Update counter
+    document.querySelector('#num-count').innerHTML = `${e.target.value.length}/100`;
+}
+
 const ProfileEditorHeader = (props) => {
     return(
         <div class='profile-form-header'>
@@ -25,7 +39,12 @@ const ProfileEditor = (props) => {
             <div class='profile-form-content'>
                 <div class='profile-form-bio'>
                     <label for="bio">Biography</label>
-                    <textarea name="bio" rows="20" placeholder="" class="bio-area"></textarea>
+                    <div id='profile-bio-input'>
+                        <textarea name="bio" rows="10" placeholder="" class="bio-area"
+                        maxlength="100"
+                        onChange={(e) => trackCharacters(e, 100)}></textarea>
+                        <p id='num-count'>0/100</p>
+                    </div>
                 </div>
             </div>
             <div class="profile-form-footer">

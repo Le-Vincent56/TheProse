@@ -163,7 +163,8 @@
 #profile-bio-display {
     @include centered;
     margin-top: 20px;
-    width: 50%;
+    width: 25%;
+    overflow-wrap: break-word;
 }
 
 #profile-bio-text {
@@ -174,4 +175,16 @@
     @include centered;
     width: 60%;
     margin-bottom: 20px;
+}
+
+@media only screen and (min-width: 500px) and (max-width: 900px) {
+    #profile-bio-display {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 901px) and (max-width: 1400px) {
+    #profile-bio-display {
+        width: 33%;
+    }
 }
