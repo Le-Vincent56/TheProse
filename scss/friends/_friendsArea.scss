@@ -9,6 +9,77 @@
     transform: translateX(-50%);
 }
 
+@mixin scaled-down {
+    #friends-area {
+        padding: 15px
+    }
+
+    #friends-area-header {
+        @include centered;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        align-items: flex-start;
+    
+        #friends-area-header-label {
+            width: 100%;
+
+            #friends-area-header-text {
+                margin: 0;
+                text-align: left;
+            }
+        }
+    
+        #friends-followers-area, #friends-following-area {
+            width: 75%;
+    
+            h3 {
+                font-size: 12px;
+            }
+        }
+    }
+
+    #friends-area-controls {
+        left: 0%;
+        transform: translateX(0%);
+        
+        #control-add-friend {
+            width:65%;
+            height: 25px;
+
+            p {
+                margin-top: 7px;
+                font-size: 10px;
+            }
+        }
+    }
+}
+
+@mixin prose-button-div {
+    div {
+        height: 40px;
+        cursor: pointer;
+        border-radius: 3px;
+        border: 1.5px solid palette.$dark-color;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow: none;
+        background-color: palette.$background-color;
+        text-align: center;
+    }
+
+    div:hover {
+        color: palette.$background-color;
+        background-color: palette.$dark-color;
+        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+        transform: translateY(-2px);
+    }
+
+    div:active {
+        box-shadow: none;
+        transform: translateY(0);
+    }
+}
+
 #friends-area {
     display: flex;
     flex-direction: column;
@@ -108,8 +179,70 @@
 
 #friends-area-controls {
     @include centered;
+    @include prose-button-div;
 
     #control-add-friend {
         width: 125px;
+
+        p {
+            margin: 10px 0px 0px 0px;
+            font-family: palette.$main-font;
+        }
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    @include scaled-down;
+}
+
+@media only screen and (min-width: 601px) and (max-width: 900px) {
+    @include scaled-down;
+
+    #friends-area {
+        padding: 20px
+    }
+
+    #friends-area-header {
+        #friends-followers-area, #friends-following-area {
+            width: 125px;
+        }
+    }
+
+    #friends-area-controls {
+        #control-add-friend {
+            width: 125px;
+            height: 30px;
+
+            p {
+                margin-top: 7px;
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 901px) and (max-width: 1400px) {
+    @include scaled-down;
+
+    #friends-area {
+        padding: 40px
+    }
+
+    #friends-area-header {
+        #friends-followers-area, #friends-following-area {
+            width: 125px;
+        }
+    }
+
+    #friends-area-controls {
+        #control-add-friend {
+            width: 125px;
+            height: 30px;
+
+            p {
+                margin-top: 7px;
+                font-size: 12px;
+            }
+        }
     }
 }

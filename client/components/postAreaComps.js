@@ -120,7 +120,7 @@ const PostAreaControls = (props) => {
                 const data = await response.json();
 
                 // Check if the user has posted less than the limit
-                setHitMaxPosts(data.posts.length >= 1);
+                setHitMaxPosts(data.posts.length >= 5);
             }
         }
         getUserPosts();

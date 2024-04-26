@@ -2,85 +2,9 @@
 @use '../post/postArea';
 @use '../friends/friendsArea';
 
-@mixin prose-button-div-comp {
-    height: 40px;
-    cursor: pointer;
-    border-radius: 3px;
-    border: 1.5px solid palette.$dark-color;
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    box-shadow: none;
-    background-color: palette.$background-color;
-    text-align: center;
-}
-
-@mixin prose-button-div-hover-comp {
-    color: palette.$background-color;
-    background-color: palette.$dark-color;
-    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-    transform: translateY(-2px);
-}
-
-@mixin prose-button-div-active-comp {
-    box-shadow: none;
-    transform: translateY(0);
-}
-
-
 #profile-body {
     margin-top: 30px;
     display: flex;
     flex-direction: row;
     gap: 30px;
-}
-
-#post-area-controls {
-    #control-add-post {
-        @include prose-button-div-comp;
-
-        p {
-            margin: 10px 0px 0px 0px;
-            font-family: palette.$main-font;
-        }
-    }
-
-    #control-add-post:hover {
-        @include prose-button-div-hover-comp;
-    }
-
-    #control-add-post:active {
-        @include prose-button-div-active-comp;
-    }
-
-    #control-add-post-disabled {
-        height: 40px;
-        border-radius: 3px;
-        border: 1.5px solid palette.$dark-color;
-        box-shadow: none;
-        background-color: palette.$background-color-darker;
-        text-align: center;
-
-        p {
-            margin: 10px 0px 0px 0px;
-            font-family: palette.$main-font;
-        }
-    }
-}
-
-#friends-area-controls {
-    #control-add-friend {
-        @include prose-button-div-comp;
-
-        p {
-            margin: 10px 0px 0px 0px;
-            font-family: palette.$main-font;
-        }
-    }
-
-    #control-add-friend:hover {
-        @include prose-button-div-hover-comp;
-    }
-
-    #control-add-friend:active {
-        @include prose-button-div-active-comp;
-    }
 }

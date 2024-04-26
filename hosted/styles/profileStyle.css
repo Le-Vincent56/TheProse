@@ -65,6 +65,39 @@
   cursor: pointer;
 }
 
+@media only screen and (max-width: 500px) {
+  #nav-bar {
+    justify-content: flex-start;
+  }
+  #prose-title-header {
+    position: relative;
+    left: 0;
+    transform: translateX(0%);
+    margin-left: 25px;
+  }
+  #login-link {
+    right: 20%;
+  }
+  #signup-link {
+    right: 4%;
+  }
+}
+@media only screen and (max-width: 750px) and (min-width: 501px) {
+  #login-link {
+    right: 18%;
+  }
+  #signup-link {
+    right: 4%;
+  }
+}
+@media only screen and (max-width: 1000px) and (min-width: 751px) {
+  #login-link {
+    right: 16%;
+  }
+  #signup-link {
+    right: 4%;
+  }
+}
 html, body {
   height: 100%;
   width: 100%;
@@ -306,7 +339,104 @@ html, body {
   background-color: #a30f05;
   border-color: #a30f05;
 }
+.form-footer .form-content {
+  flex-direction: column;
+}
 
+@media only screen and (max-width: 600px) {
+  #post-header {
+    padding: 10px;
+  }
+  #post-header #cancel-post-btn-container div {
+    height: 30px;
+    width: 100px;
+  }
+  #post-header #cancel-post-btn-container div p {
+    font-size: 11px;
+  }
+  #post-header #post-header-label {
+    margin-left: 20px;
+  }
+  #post-header #post-header-label h1 {
+    font-size: 24px;
+    margin: 0;
+  }
+  .form-content {
+    padding: 10px;
+    width: 90%;
+  }
+  .form-content .form-details-1 {
+    gap: 10px;
+  }
+  .form-content .form-details-1 .form-detail-title {
+    flex-grow: 1;
+    width: 50%;
+  }
+  .form-content .form-details-1 .form-detail-author {
+    flex-grow: 1;
+    width: 30%;
+  }
+}
+@media only screen and (max-width: 1050px) and (min-width: 601px) {
+  #post-header {
+    padding: 10px;
+  }
+  #post-header #cancel-post-btn-container div {
+    width: 125px;
+    height: 50px;
+    cursor: pointer;
+    border-radius: 3px;
+    border: 1.5px solid #07031A;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: none;
+    background-color: #F4F6FF;
+    text-align: center;
+  }
+  #post-header #cancel-post-btn-container div p {
+    font-family: "EB Garamond", serif;
+  }
+  #post-header #cancel-post-btn-container div:hover {
+    color: #F4F6FF;
+    background-color: #07031A;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+  }
+  #post-header #cancel-post-btn-container div:active {
+    box-shadow: none;
+    transform: translateY(0);
+  }
+  #post-header #cancel-post-btn-container div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+  }
+  #post-header #cancel-post-btn-container div p {
+    margin: 0;
+  }
+  #post-header #post-header-label {
+    margin-left: 40px;
+  }
+  #post-header #post-header-label h1 {
+    font-size: 30px;
+    margin: 0;
+  }
+  .form-content {
+    padding: 10px;
+    width: 90%;
+  }
+  .form-content .form-details-1 {
+    gap: 10px;
+  }
+  .form-content .form-details-1 .form-detail-title {
+    flex-grow: 1;
+    width: 50%;
+  }
+  .form-content .form-details-1 .form-detail-author {
+    flex-grow: 1;
+    width: 30%;
+  }
+}
 #profile-header {
   background-color: #DCDDE0;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 50px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
@@ -588,6 +718,16 @@ html, body {
   transition: width 0 ease;
 }
 
+@media only screen and (max-width: 1400px) {
+  .post-node {
+    width: 100%;
+    max-width: 100%;
+  }
+  .post-node:hover {
+    width: 100%;
+    box-shadow: 0 10px 20px 0 rgba(32, 32, 36, 0.12);
+  }
+}
 #post-area {
   display: flex;
   flex-direction: column;
@@ -632,12 +772,108 @@ html, body {
   transform: translateX(-50%);
 }
 #post-area-controls #control-add-post {
+  height: 40px;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1.5px solid #07031A;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: none;
+  background-color: #F4F6FF;
+  text-align: center;
   width: 100px;
+}
+#post-area-controls #control-add-post p {
+  margin: 10px 0px 0px 0px;
+  font-family: "EB Garamond", serif;
+}
+#post-area-controls #control-add-post:hover {
+  color: #F4F6FF;
+  background-color: #07031A;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+#post-area-controls #control-add-post:active {
+  box-shadow: none;
+  transform: translateY(0);
 }
 #post-area-controls #control-add-post-disabled {
   width: 100px;
+  height: 40px;
+  border-radius: 3px;
+  border: 1.5px solid #07031A;
+  box-shadow: none;
+  background-color: #DCDDE0;
+  text-align: center;
+}
+#post-area-controls #control-add-post-disabled p {
+  margin: 10px 0px 0px 0px;
+  font-family: "EB Garamond", serif;
 }
 
+@media only screen and (min-width: 500px) and (max-width: 600px) {
+  #post-area-header {
+    left: 0%;
+    transform: translateX(0%);
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  #post-area-header #post-header-max-posts {
+    margin: 0;
+  }
+  #post-area-controls {
+    left: 0%;
+    transform: translateX(0%);
+    margin-bottom: 8px;
+  }
+}
+@media only screen and (max-width: 500px) {
+  #post-area-header {
+    left: 0%;
+    transform: translateX(0%);
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  #post-area-header #post-header-max-posts {
+    margin: 0;
+  }
+  #post-area-controls {
+    left: 0%;
+    transform: translateX(0%);
+    margin-bottom: 10px;
+  }
+}
+@media only screen and (min-width: 601px) and (max-width: 900px) {
+  #post-area-header {
+    left: 0%;
+    transform: translateX(0%);
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  #post-area-header #post-header-max-posts {
+    margin: 0;
+  }
+  #post-area-controls {
+    left: 0%;
+    transform: translateX(0%);
+    margin-bottom: 18px;
+  }
+}
+@media only screen and (min-width: 901px) and (max-width: 1400px) {
+  #post-area-header {
+    left: 0%;
+    transform: translateX(0%);
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  #post-area-header #post-header-max-posts {
+    margin: 0;
+  }
+  #post-area-controls {
+    left: 0%;
+    transform: translateX(0%);
+    margin-bottom: 40px;
+  }
+}
 .friends-search-results-container {
   position: relative;
   left: 50%;
@@ -722,6 +958,28 @@ html, body {
   margin-top: 5px;
 }
 
+@media only screen and (max-width: 800px) {
+  .friends-search-results-container {
+    height: 200px;
+    max-height: 200px;
+  }
+  .search-node {
+    width: 98%;
+    height: 75px;
+  }
+  .search-node .search-node-details {
+    padding: 12px 12px 12px 24px;
+  }
+  .search-node .search-node-details .search-node-username {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .search-node .search-node-details .search-node-date {
+    opacity: 55%;
+    margin: 0;
+  }
+}
 .backdrop {
   position: fixed;
   top: 0;
@@ -746,6 +1004,7 @@ html, body {
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
+  transition: all 0.3s ease-in-out;
 }
 .friends-modal i {
   margin: 0;
@@ -786,6 +1045,29 @@ html, body {
 @keyframes spin {
   100% {
     transform: rotate(180deg);
+  }
+}
+@media only screen and (max-width: 800px) {
+  .friends-modal {
+    width: 400px;
+    height: 400px;
+  }
+  .friends-modal-header {
+    align-items: baseline;
+    padding: 0px 20px;
+    border-bottom: 1px solid #07031A;
+  }
+  .friends-modal-header .friends-modal-header-text {
+    text-align: left;
+    margin-top: 15px;
+  }
+  .friends-modal-header i {
+    text-align: right;
+    margin-top: 15px;
+  }
+  #friend-search-input {
+    height: 15px;
+    font-size: 12px;
   }
 }
 .friends-list {
@@ -891,6 +1173,60 @@ html, body {
   transition: width 0 ease;
 }
 
+@media only screen and (max-width: 700px) {
+  .friend-node {
+    width: 100%;
+    max-width: 100%;
+  }
+  .friend-node .friend-node-content {
+    flex-direction: column;
+  }
+  .friend-node .friend-node-content .friend-username {
+    margin: 0;
+  }
+  .friend-node .friend-node-content .remove-friend-container {
+    margin-top: 6px;
+    flex-grow: 1;
+  }
+  .friend-node .friend-node-content .remove-friend-container .remove-friend-btn {
+    height: 30px;
+  }
+  .friend-node .friend-node-content .remove-friend-container .remove-friend-btn p {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+  .friend-node:hover {
+    width: 100%;
+    box-shadow: 0 10px 20px 0 rgba(32, 32, 36, 0.12);
+  }
+}
+@media only screen and (min-width: 701px) and (max-width: 1400px) {
+  .friend-node {
+    width: 100%;
+    max-width: 100%;
+  }
+  .friend-node .friend-node-content {
+    flex-direction: row;
+    align-items: baseline;
+  }
+  .friend-node .friend-node-content .friend-username {
+    margin: 0;
+  }
+  .friend-node .friend-node-content .remove-friend-container {
+    flex-grow: 1;
+  }
+  .friend-node .friend-node-content .remove-friend-container .remove-friend-btn {
+    height: 30px;
+  }
+  .friend-node .friend-node-content .remove-friend-container .remove-friend-btn p {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+  .friend-node:hover {
+    width: 100%;
+    box-shadow: 0 10px 20px 0 rgba(32, 32, 36, 0.12);
+  }
+}
 #friends-area {
   display: flex;
   flex-direction: column;
@@ -987,18 +1323,7 @@ html, body {
   left: 50%;
   transform: translateX(-50%);
 }
-#friends-area-controls #control-add-friend {
-  width: 125px;
-}
-
-#profile-body {
-  margin-top: 30px;
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-}
-
-#post-area-controls #control-add-post {
+#friends-area-controls div {
   height: 40px;
   cursor: pointer;
   border-radius: 3px;
@@ -1008,56 +1333,177 @@ html, body {
   background-color: #F4F6FF;
   text-align: center;
 }
-#post-area-controls #control-add-post p {
-  margin: 10px 0px 0px 0px;
-  font-family: "EB Garamond", serif;
-}
-#post-area-controls #control-add-post:hover {
+#friends-area-controls div:hover {
   color: #F4F6FF;
   background-color: #07031A;
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
-#post-area-controls #control-add-post:active {
+#friends-area-controls div:active {
   box-shadow: none;
   transform: translateY(0);
 }
-#post-area-controls #control-add-post-disabled {
-  height: 40px;
-  border-radius: 3px;
-  border: 1.5px solid #07031A;
-  box-shadow: none;
-  background-color: #DCDDE0;
-  text-align: center;
-}
-#post-area-controls #control-add-post-disabled p {
-  margin: 10px 0px 0px 0px;
-  font-family: "EB Garamond", serif;
-}
-
 #friends-area-controls #control-add-friend {
-  height: 40px;
-  cursor: pointer;
-  border-radius: 3px;
-  border: 1.5px solid #07031A;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: none;
-  background-color: #F4F6FF;
-  text-align: center;
+  width: 125px;
 }
 #friends-area-controls #control-add-friend p {
   margin: 10px 0px 0px 0px;
   font-family: "EB Garamond", serif;
 }
-#friends-area-controls #control-add-friend:hover {
-  color: #F4F6FF;
-  background-color: #07031A;
-  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-  transform: translateY(-2px);
+
+@media only screen and (max-width: 600px) {
+  #friends-area {
+    padding: 15px;
+  }
+  #friends-area-header {
+    position: relative;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: flex-start;
+  }
+  #friends-area-header #friends-area-header-label {
+    width: 100%;
+  }
+  #friends-area-header #friends-area-header-label #friends-area-header-text {
+    margin: 0;
+    text-align: left;
+  }
+  #friends-area-header #friends-followers-area, #friends-area-header #friends-following-area {
+    width: 75%;
+  }
+  #friends-area-header #friends-followers-area h3, #friends-area-header #friends-following-area h3 {
+    font-size: 12px;
+  }
+  #friends-area-controls {
+    left: 0%;
+    transform: translateX(0%);
+  }
+  #friends-area-controls #control-add-friend {
+    width: 65%;
+    height: 25px;
+  }
+  #friends-area-controls #control-add-friend p {
+    margin-top: 7px;
+    font-size: 10px;
+  }
 }
-#friends-area-controls #control-add-friend:active {
-  box-shadow: none;
-  transform: translateY(0);
+@media only screen and (min-width: 601px) and (max-width: 900px) {
+  #friends-area {
+    padding: 15px;
+  }
+  #friends-area-header {
+    position: relative;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: flex-start;
+  }
+  #friends-area-header #friends-area-header-label {
+    width: 100%;
+  }
+  #friends-area-header #friends-area-header-label #friends-area-header-text {
+    margin: 0;
+    text-align: left;
+  }
+  #friends-area-header #friends-followers-area, #friends-area-header #friends-following-area {
+    width: 75%;
+  }
+  #friends-area-header #friends-followers-area h3, #friends-area-header #friends-following-area h3 {
+    font-size: 12px;
+  }
+  #friends-area-controls {
+    left: 0%;
+    transform: translateX(0%);
+  }
+  #friends-area-controls #control-add-friend {
+    width: 65%;
+    height: 25px;
+  }
+  #friends-area-controls #control-add-friend p {
+    margin-top: 7px;
+    font-size: 10px;
+  }
+  #friends-area {
+    padding: 20px;
+  }
+  #friends-area-header #friends-followers-area, #friends-area-header #friends-following-area {
+    width: 125px;
+  }
+  #friends-area-controls #control-add-friend {
+    width: 125px;
+    height: 30px;
+  }
+  #friends-area-controls #control-add-friend p {
+    margin-top: 7px;
+    font-size: 12px;
+  }
+}
+@media only screen and (min-width: 901px) and (max-width: 1400px) {
+  #friends-area {
+    padding: 15px;
+  }
+  #friends-area-header {
+    position: relative;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: flex-start;
+  }
+  #friends-area-header #friends-area-header-label {
+    width: 100%;
+  }
+  #friends-area-header #friends-area-header-label #friends-area-header-text {
+    margin: 0;
+    text-align: left;
+  }
+  #friends-area-header #friends-followers-area, #friends-area-header #friends-following-area {
+    width: 75%;
+  }
+  #friends-area-header #friends-followers-area h3, #friends-area-header #friends-following-area h3 {
+    font-size: 12px;
+  }
+  #friends-area-controls {
+    left: 0%;
+    transform: translateX(0%);
+  }
+  #friends-area-controls #control-add-friend {
+    width: 65%;
+    height: 25px;
+  }
+  #friends-area-controls #control-add-friend p {
+    margin-top: 7px;
+    font-size: 10px;
+  }
+  #friends-area {
+    padding: 40px;
+  }
+  #friends-area-header #friends-followers-area, #friends-area-header #friends-following-area {
+    width: 125px;
+  }
+  #friends-area-controls #control-add-friend {
+    width: 125px;
+    height: 30px;
+  }
+  #friends-area-controls #control-add-friend p {
+    margin-top: 7px;
+    font-size: 12px;
+  }
+}
+#profile-body {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
 }
 
 #profile-editor {

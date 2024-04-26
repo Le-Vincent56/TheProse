@@ -1,7 +1,7 @@
 // Imports
 const mongoose = require('mongoose');
 
-// Define the Domo schema
+// Define the Post schema
 const PostSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -49,7 +49,7 @@ PostSchema.statics.toAPI = (doc) => ({
   id: doc.id,
 });
 
-// Establish the Domo model
+// Establish the Post model
 const PostModel = mongoose.model('Post', PostSchema);
 
 // Exports

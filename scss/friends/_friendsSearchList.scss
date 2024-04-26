@@ -92,3 +92,30 @@
         margin-top: 5px;
     }
 }
+
+@media only screen and (max-width: 800px) {
+    .friends-search-results-container {
+        height: 200px;
+        max-height: 200px;
+    }
+
+    .search-node {
+        width: 98%;
+        height: 75px;
+
+        .search-node-details {
+            padding: 12px 12px 12px 24px;
+
+            .search-node-username {
+                font-size: 24px;
+                font-weight: 600;
+                margin: 0;
+            }
+        
+            .search-node-date {
+                opacity: 55%;
+                margin: 0;
+            }
+        }
+    }
+}

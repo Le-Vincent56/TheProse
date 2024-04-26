@@ -130,3 +130,15 @@
     transition: width 0 ease;
 }
 
+@media only screen and (max-width: 1400px) {
+    .post-node {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .post-node:hover {
+        width: 100%;
+        box-shadow: 0 10px 20px 0 rgba(32, 32, 36, 0.12);
+    }
+}
+
