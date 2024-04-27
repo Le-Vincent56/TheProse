@@ -250,20 +250,6 @@ const SignupWindow = (props) => {
     );
 };
 
-const ExitPage = (props) => {
-    return (
-        <motion.div className='page-wipe'
-            animate={{
-                x: [0, window.innerWidth],
-            }}
-            transition={{
-                duration: 1,
-                ease: 'easeInOut'
-            }}>
-        </motion.div>
-    )
-};
-
 const init = () => {
     // Get page details
     const navBar = document.getElementById('nav-bar');
@@ -274,7 +260,6 @@ const init = () => {
     // Get the login and signup buttons
     const loginButton = document.getElementById('login-button');
     const signupButton = document.getElementById('signup-button');
-    const homePage = document.getElementById('home-page-link');
 
     // Set the root to the content element
     const root = createRoot(document.getElementById('content'));
@@ -292,16 +277,6 @@ const init = () => {
         e.preventDefault();
         currentPage = false;
         root.render(<LoadPage firstRender={false} formToLoad={currentPage}/>)
-        return false;
-    });
-
-    homePage.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        // Unload page
-        
-        
-        helper.sendGet('/', null);
         return false;
     });
 
