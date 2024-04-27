@@ -10,6 +10,7 @@ const postFormComps = require('./components/postFormComps.js');
 const postAreaComps = require('./components/postAreaComps.js');
 const profileEditorComps = require('./components/profileEditorComps.js');
 const friendsAreaComps = require('./components/friendsAreaComps.js');
+const postReadComps = require('./components/postReadComps.js');
 
 // Set React elements
 const PostFormControls = postFormComps.PostFormHeader;
@@ -20,6 +21,8 @@ const PostArea = postAreaComps.PostArea;
 const ProfileEditorHeader = profileEditorComps.ProfileEditorHeader;
 const ProfileEditor = profileEditorComps.ProfileEditor;
 const FriendsArea = friendsAreaComps.FriendsArea;
+const PostReadHeader = postReadComps.PostReadHeader;
+const PostRead = postReadComps.PostRead;
 
 let currentState;
 let tags = [];
@@ -39,6 +42,12 @@ const loadPageEdit = (editPostData) => {
     root.render(<LoadPage currentState={currentState} postObj={editPostData}/>);
 }
 
+const loadPageRead = (readPostData, isPosted, postID) => {
+    const root = createRoot(document.getElementById('content'));
+    root.render(<LoadPage currentState={currentState} postObj={readPostData}
+                    isPosted={isPosted}/>);
+}
+
 const loadPageEditAccount = (editAccountData) => {
     // Reload the page with the username to edit the account for
     const root = createRoot(document.getElementById('content'));
@@ -56,8 +65,6 @@ const startPost = (e) => {
 const cancelPost = (e) => {
     // Set current state to profile page
     currentState = 0;
-
-    //TODO: SAVE POST?
 
     loadPage();
 }
@@ -105,6 +112,27 @@ const togglePremium = (e, premium, onPremiumChanged) => {
 
     helper.sendPost('/updatePremium', {premium: newPremium}, onPremiumChanged);
     return false;
+}
+
+const readPost = async (e, postData, isPosted = false) => {
+    // Get the post
+    const owner = postData.owner;
+    const postID = postData.id;
+    const response = await fetch(`/getPost?id=${postID}&owner=${owner}`);
+    const data = await response.json();
+
+    // Set the current state to reading the post
+    currentState = 5;
+
+    loadPageRead(data.post[0], isPosted);
+}
+
+const checkPostState = async (e, owner, isPosted) => {
+    if(isPosted) {
+        readPost(e, {id: e.target.id, owner}, isPosted);
+    } else {
+        startEdit(e, isPosted);
+    }
 }
 
 const PremiumButton = (props) => {
@@ -209,6 +237,7 @@ const LoadPage = (props) => {
     const [reloadFriends, setReloadFriends] = useState(false);
     const [showFriendsModal, setFriendsModal] = useState(false);
     const [profile, setProfile] = useState({});
+    const [genreTags, setTags] = useState(tags);
 
     useEffect(() => {
         // If editing a post, add the current data
@@ -224,6 +253,7 @@ const LoadPage = (props) => {
             // Set tags
             tags = props.postObj.genre;
             profileUI.addTags(tags);
+            setTags(tags);
 
             // Add body
             const body = document.querySelector('.body-area');
@@ -244,7 +274,7 @@ const LoadPage = (props) => {
                     <ProfileHeader profile={profile} setProfile={setProfile}
                     reloadHeader={reloadHeader} triggerReload={() => setReloadHeader(!reloadHeader)}/>
                     <div id="profile-body">
-                        <PostArea profile={profile}
+                        <PostArea profile={profile} readPost={readPost} checkPostState={checkPostState}
                             startPost={startPost} startEdit={startEdit} reloadPosts={reloadPosts}/>
                         <FriendsArea profile={profile}
                             showModal={showFriendsModal}
@@ -259,7 +289,7 @@ const LoadPage = (props) => {
             return(
                 <div id="profile-new-post">
                     <PostFormControls cancelPost={cancelPost}/>
-                    <PostFormCreate tags={tags}/>
+                    <PostFormCreate tags={genreTags}/>
                 </div>
             );
 
@@ -268,7 +298,7 @@ const LoadPage = (props) => {
             return(
                 <div id="profile-edit-post">
                     <PostFormControls cancelPost={cancelPost}/>
-                    <PostFormEdit tags={tags} postData={props.postObj}/>
+                    <PostFormEdit tags={genreTags} postData={props.postObj}/>
                 </div>
             );
 
@@ -277,7 +307,7 @@ const LoadPage = (props) => {
             return(
                 <div id="profile-posted-post">
                     <PostFormControls cancelPost={cancelPost}/>
-                    <PostFormPosted tags={tags} postData={props.postObj}/>
+                    <PostFormPosted tags={genreTags} postData={props.postObj}/>
                 </div>
             );
 
@@ -288,7 +318,17 @@ const LoadPage = (props) => {
                     <ProfileEditorHeader cancelProfileEdit={cancelProfileEdit}/>
                     <ProfileEditor profileData={props.accountObj}/>
                 </div>
-            )
+            );
+
+        // Read post
+        case 5:
+            return (
+                <div id="profile-read-post">
+                    <PostReadHeader postData={props.postObj} backButton={cancelPost}
+                        editPost={startEdit} isPosted={props.isPosted}/>
+                    <PostRead postData={props.postObj}/>
+                </div>
+            );
     }
 };
 

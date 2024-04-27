@@ -162,8 +162,21 @@ const getPost = async (req, res) => {
   const params = query.parse(parsedURL.query);
 
   try {
-    const postQuery = { id: params.id };
+    let postQuery;
+    if(params.owner) {
+      postQuery = { id: params.id, owner: params.owner}
+    } else {
+      postQuery = { id: params.id };
+    }
     const docs = await Post.find(postQuery).select('title body genre author private id').lean().exec();
+
+    if(params.owner) {
+      if(params.owner === req.session.account._id) {
+        docs[0].isCurrentUser = true;
+      } else {
+        docs[0].isCurrentUser = false;
+      }
+    }
 
     // Return the post in a json
     return res.json({ post: docs });

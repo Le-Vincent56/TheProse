@@ -9,7 +9,7 @@ const PostFormHeader = (props) => {
                 <div id="cancel-post-btn"
                         onClick={(e) => props.cancelPost(e)}
                 >
-                    <p className='cancel-post-btn-text'>CANCEL POST</p>
+                    <p className='cancel-post-btn-text'>BACK</p>
                 </div>
             </div>
             <div id='post-header-label'>

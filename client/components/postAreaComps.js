@@ -54,7 +54,7 @@ const PostList = (props) => {
         if(props.profile.isCurrentUser) {
             return(
                 <div id={post.id} className="post-node"
-                    onClick={(e) => props.startEdit(e, isPosted)}>
+                    onClick={(e) => props.checkPostState(e, props.profile._id, isPosted)}>
                     <div id={post.id} class="post-node-content">
                         <div id={post.id} class="post-header">
                             <h2 id={post.id} class="post-title">{post.title}</h2>
@@ -76,21 +76,26 @@ const PostList = (props) => {
             )
         } else {
             return(
-                <div className="post-node">
-                    <div class="post-node-content">
-                        <div class="post-header">
-                            <h2 class="post-title">{post.title}</h2>
-                            <p class={privacyClass}>{privacy}</p>
+                <div id={post.id} className="post-node">
+                    <div id={post.id} class="post-node-content"
+                    onClick={(e) => {
+                        props.readPost(e, 
+                            {id: post.id, owner: props.profile._id}
+                        );
+                    }}>
+                        <div id={post.id} class="post-header">
+                            <h2 id={post.id} class="post-title">{post.title}</h2>
+                            <p id={post.id} class={privacyClass}>{privacy}</p>
                         </div>
-                        <div class="post-author">
-                            <h4 class="post-author-text">By: {post.author}</h4>
+                        <div id={post.id} class="post-author">
+                            <h4 id={post.id} lass="post-author-text">By: {post.author}</h4>
                         </div>
-                        <div class="post-hover-content">
-                            <div class="post-genre">
-                                <h4 class="post-genre-text">{genreString}</h4>
+                        <div id={post.id} class="post-hover-content">
+                            <div id={post.id} class="post-genre">
+                                <h4 id={post.id}class="post-genre-text">{genreString}</h4>
                             </div>
-                            <div class="post-body-preview">
-                                <p class="post-body-preview-text">{post.body.slice(0, 350)}</p>
+                            <div id={post.id} class="post-body-preview">
+                                <p id={post.id} class="post-body-preview-text">{post.body.slice(0, 350)}</p>
                             </div>
                         </div>
                     </div>
@@ -160,7 +165,7 @@ const PostArea = (props) => {
                     <h3 id='post-header-max-posts'>{maximumPosts}</h3>
                 </div>
                 <PostAreaControls startPost={props.startPost} profile={props.profile}/>
-                <PostList profile={props.profile}
+                <PostList profile={props.profile} checkPostState={props.checkPostState}
                 startEdit={props.startEdit} posts={[]} reloadPosts={props.reloadPosts}/>
             </div>
         )
@@ -170,7 +175,7 @@ const PostArea = (props) => {
                 <div id='post-area-header'>
                     <h1 id='post-area-header-text'>POSTS</h1>
                 </div>
-                <PostList profile={props.profile}
+                <PostList profile={props.profile} readPost={props.readPost}
                 startEdit={props.startEdit} posts={[]} reloadPosts={props.reloadPosts}/>
             </div>
         )
